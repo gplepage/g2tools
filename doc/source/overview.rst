@@ -1,4 +1,4 @@
-:mod:`g2tools`: Muon g-2 from Lattice QCD
+Muon g-2 from Lattice QCD using :mod:`g2tools`
 ===============================================
 
 .. |g2tools| replace:: :mod:`g2tools`

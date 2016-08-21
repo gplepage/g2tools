@@ -1,4 +1,4 @@
-:mod:`g2tools` - Tools for Muon g-2 in Lattice QCD
+:mod:`g2tools` Module
 =====================================================
 
 .. module:: g2tools
