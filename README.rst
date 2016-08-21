@@ -38,9 +38,12 @@ Information on how to install the module is in the file INSTALLATION.
 
 To test the module try ``make tests``.
 
+Documentation is in the doc directory --- open doc/html/index.html.
+A pdf version is in doc/g2tools.pdf.
+
 The examples directory has a complete example, showing how to go from Monte
 Carlo data for a *jj* correlator to a contribution to the muon's magnetic
-moment anomaly *a*\ :sub:`µ`.
+moment anomaly *a*\ :sub:`µ`. See also the introduction in the documentation.
 
 The general technique that underlies this module is described in
 Chakraborty *et al*, Phys.Rev. D89 (2014) no.11, 114501. Google
