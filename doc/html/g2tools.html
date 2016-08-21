@@ -177,9 +177,9 @@ automatic value is overridden if <code class="docutils literal"><span class="pre
 <h2>Padé Approximants<a class="headerlink" href="#pade-approximants" title="Permalink to this headline">¶</a></h2>
 <p>The following two functions are used for calculating Padé approximants from
 the Taylor coefficients of an arbitrary function. The first
-(<a class="reference internal" href="#g2tools.pade_svd" title="g2tools.pade_svd"><code class="xref py py-func docutils literal"><span class="pre">g2tools.pade_svd()</span></code></a>) is an algorithm that uses <em>svd</em> cuts to address
-instabilities caused  by uncertainties in the Taylor coefficients. The second
-function (<a class="reference internal" href="#g2tools.pade_gvar" title="g2tools.pade_gvar"><code class="xref py py-func docutils literal"><span class="pre">g2tools.pade_gvar()</span></code></a>) is built on the first but allows
+(<a class="reference internal" href="#g2tools.pade_svd" title="g2tools.pade_svd"><code class="xref py py-func docutils literal"><span class="pre">g2tools.pade_svd()</span></code></a>) implements an algorithm that uses <em>svd</em> cuts to
+address instabilities caused  by uncertainties in the Taylor coefficients. The
+second function (<a class="reference internal" href="#g2tools.pade_gvar" title="g2tools.pade_gvar"><code class="xref py py-func docutils literal"><span class="pre">g2tools.pade_gvar()</span></code></a>) is built on the first but allows
 Taylor coefficients to have uncertainties (<code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code>s). The statistical
 uncertainties and correlations between different coefficients are propagated
 through the analysis.</p>

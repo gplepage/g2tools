@@ -30,11 +30,12 @@ represented by the following class:
 
 Padé Approximants
 -------------------
+
 The following two functions are used for calculating Padé approximants from
 the Taylor coefficients of an arbitrary function. The first
-(:func:`g2tools.pade_svd`) is an algorithm that uses *svd* cuts to address
-instabilities caused  by uncertainties in the Taylor coefficients. The second
-function (:func:`g2tools.pade_gvar`) is built on the first but allows
+(:func:`g2tools.pade_svd`) implements an algorithm that uses *svd* cuts to
+address instabilities caused  by uncertainties in the Taylor coefficients. The
+second function (:func:`g2tools.pade_gvar`) is built on the first but allows
 Taylor coefficients to have uncertainties (|GVar|\s). The statistical
 uncertainties and correlations between different coefficients are propagated
 through the analysis.
