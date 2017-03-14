@@ -130,8 +130,8 @@ to physical units (using the inverse lattice spacing <code class="docutils liter
 renormalizing the current (<code class="docutils literal"><span class="pre">Z</span></code>).</p>
 <p><code class="docutils literal"><span class="pre">vpol(q2)</span></code> is the vacuum polarization function at Euclidean <em>q</em><sup>2</sup>
 equal to <code class="docutils literal"><span class="pre">q2</span></code>. Object <code class="docutils literal"><span class="pre">vpol</span></code> has type <a class="reference internal" href="g2tools.html#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal"><span class="pre">g2tools.vacpol</span></code></a>. It
-constructs a  [2,2] Padé approximant to the exact function from the moments,
-and uses the approximant to  approximate that function.
+constructs a  [2,2] Padé approximant from the moments,
+and uses that approximant to  approximate the exact function.
 The approximants converge to the exact result as the order
 increases provided the momentum is space-like (<code class="docutils literal"><span class="pre">q2</span></code> non-negative).
 Using a [1,1] Padé instead of [2,2] gives almost identical results here, so the

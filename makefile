@@ -1,5 +1,5 @@
 # Created by G. Peter Lepage (Cornell University) on 2016-08-20.
-# Copyright (c) 2016 G. Peter Lepage.
+# Copyright (c) 2016-17 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -11,9 +11,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-PIP = pip
+PIP = python -m pip
 PYTHON = python
 PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
+VERSION = `python -c 'import g2tools; print g2tools.__version__'`
 
 install :
 	$(PIP) install . --user
@@ -49,9 +50,9 @@ sdist:			# source distribution
 .PHONY: tests
 
 tests test-all:
-	$(PYTHON) -m unittest discover
+	$(MAKE) -C tests PYTHON=$(PYTHON) tests
 
-run-examples:
+run run-examples:
 	$(MAKE) -C examples PYTHON=$(PYTHON) run
 
 register-pypi:
@@ -61,9 +62,19 @@ upload-pypi:
 	python setup.py sdist upload
 
 upload-git:
+	echo  "version $(VERSION)"
 	make doc-all
-	git commit -a -m "prep for upload"
+	git commit -a -m "prep documentation for upload"
 	git push origin master
+
+tag-git:
+	echo  "version $(VERSION)"
+	git tag -a v$(VERSION) -m "version $(VERSION)"
+	git push origin v$(VERSION)
+
+test-download:
+	-$(PIP) uninstall g2tools
+	$(PIP) install g2tools --no-cache-dir
 
 clean:
 	rm -f -r build

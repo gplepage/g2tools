@@ -59,7 +59,7 @@ contact g.p.lepage@cornell.edu if there are persistent problems.
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-09-13.
-# Copyright (c) 2014-2016 G. Peter Lepage.
+# Copyright (c) 2014-2017 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ import collections
 
 import math
 
-__version__ = '1.0'
+__version__ = '1.0.1'
 
 # constants
 ALPHA = 1/137.035999074
@@ -442,7 +442,7 @@ def pade_gvar(f, m, n, rtol=None):
         data=c[:n + m + 1],
         fcn=fitfcn,
         p0=p0,
-        reltol=1e-10,
+        tol=1e-10,
         debug=True
         )
     if fit.chi2 > 1.:

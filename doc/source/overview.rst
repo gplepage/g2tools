@@ -76,8 +76,8 @@ renormalizing the current (``Z``).
 
 ``vpol(q2)`` is the vacuum polarization function at Euclidean *q*\ :sup:`2`
 equal to ``q2``. Object ``vpol`` has type :class:`g2tools.vacpol`. It
-constructs a  [2,2] Padé approximant to the exact function from the moments,
-and uses the approximant to  approximate that function.
+constructs a  [2,2] Padé approximant from the moments,
+and uses that approximant to  approximate the exact function.
 The approximants converge to the exact result as the order
 increases provided the momentum is space-like (``q2`` non-negative).
 Using a [1,1] Padé instead of [2,2] gives almost identical results here, so the
