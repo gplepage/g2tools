@@ -104,7 +104,7 @@ provided by the following code:</p>
     <span class="k">print</span><span class="p">(</span><span class="s">&#39;Taylor coefficients:&#39;</span><span class="p">,</span> <span class="n">g2</span><span class="o">.</span><span class="n">mom2taylor</span><span class="p">(</span><span class="n">mom</span><span class="p">))</span>
     <span class="k">print</span><span class="p">()</span>
 
-    <span class="c"># construct subtracted vac pol function using [2,2] Pade</span>
+    <span class="c"># construct subtracted vac pol function using [2,2] Padé</span>
     <span class="n">vpol</span> <span class="o">=</span> <span class="n">g2</span><span class="o">.</span><span class="n">vacpol</span><span class="p">(</span><span class="n">mom</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 
     <span class="c"># integrate vpol to get a_mu and print result</span>
@@ -114,7 +114,7 @@ provided by the following code:</p>
 
     <span class="c"># error budget for a_mu</span>
     <span class="k">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">fmt_errorbudget</span><span class="p">(</span>
-        <span class="n">outputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">a_mu</span><span class="o">=</span><span class="n">a_mu</span><span class="p">,</span> <span class="n">mom4</span><span class="o">=</span><span class="n">mom</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span>
+        <span class="n">outputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">a_mu</span><span class="o">=</span><span class="n">amu</span><span class="p">,</span> <span class="n">mom4</span><span class="o">=</span><span class="n">mom</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span>
         <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">Z</span><span class="p">,</span> <span class="n">ainv</span><span class="o">=</span><span class="n">ainv</span><span class="p">),</span>
         <span class="p">))</span>
 
@@ -160,6 +160,24 @@ Partial % Errors:
 uncertainty is dominated by the uncertainty in the inverse
 lattice spacing <code class="docutils literal"><span class="pre">ainv</span></code>; statistical errors from <code class="docutils literal"><span class="pre">G</span></code> are
 completely negligible in this example.</p>
+<p>An alternative to using moments is to Fourier transform the
+correlator to obtain <code class="docutils literal"><span class="pre">vpol(q2)</span></code> directly. Moments are particularly
+useful for analyzing finite-volume and other systematic errors, but
+the Fourier method is simpler to code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># compute a_mu from the Fourier transform of G(t)</span>
+<span class="n">vpol</span> <span class="o">=</span> <span class="n">g2</span><span class="o">.</span><span class="n">fourier_vacpol</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">ainv</span><span class="o">=</span><span class="n">ainv</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">Z</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">amu</span> <span class="o">=</span> <span class="n">g2</span><span class="o">.</span><span class="n">a_mu</span><span class="p">(</span><span class="n">vpol</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;a_mu contribution =&#39;</span><span class="p">,</span> <span class="n">amu</span><span class="p">)</span>
+<span class="k">print</span><span class="p">()</span>
+
+<span class="c"># error budget for a_mu</span>
+<span class="k">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">fmt_errorbudget</span><span class="p">(</span>
+    <span class="n">outputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">a_mu</span><span class="o">=</span><span class="n">amu</span><span class="p">),</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">Z</span><span class="p">,</span> <span class="n">ainv</span><span class="o">=</span><span class="n">ainv</span><span class="p">),</span>
+    <span class="p">))</span>
+</pre></div>
+</div>
+<p>This code gives identical results to that above.</p>
 <p><a class="reference internal" href="g2tools.html#module-g2tools" title="g2tools: Least-Squares Fit to Correlators."><code class="xref py py-mod docutils literal"><span class="pre">g2tools</span></code></a> is designed to work with module <code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code> which we use here
 to represent the statistical and systematic uncertainties in
 the correlator values, inverse lattice spacing, and <code class="docutils literal"><span class="pre">Z</span></code> factor. Each of these

@@ -108,7 +108,7 @@ Default is 1.</li>
 <div class="section" id="subtracted-vacuum-polarization">
 <h2>Subtracted Vacuum Polarization<a class="headerlink" href="#subtracted-vacuum-polarization" title="Permalink to this headline">¶</a></h2>
 <p>A subtracted vacuum polarization function (<code class="docutils literal"><span class="pre">Pi-hat</span></code>) is
-represented by the following class:</p>
+represented by the following classes:</p>
 <dl class="class">
 <dt id="g2tools.vacpol">
 <em class="property">class </em><code class="descclassname">g2tools.</code><code class="descname">vacpol</code><span class="sig-paren">(</span><em>g</em>, <em>order=None</em>, <em>scale=None</em>, <em>rtol=None</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.vacpol" title="Permalink to this definition">¶</a></dt>
@@ -165,6 +165,38 @@ but the automatic value is overridden if <code class="docutils literal"><span cl
 Pade approximant. This is normally set automatically
 (from the standard deviations of the moments), but the
 automatic value is overridden if <code class="docutils literal"><span class="pre">rtol</span></code> is specified.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="g2tools.fourier_vacpol">
+<em class="property">class </em><code class="descclassname">g2tools.</code><code class="descname">fourier_vacpol</code><span class="sig-paren">(</span><em>G</em>, <em>Z=1.0</em>, <em>ainv=1.0</em>, <em>periodic=True</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.fourier_vacpol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtracted vac. pol&#8217;n (<code class="docutils literal"><span class="pre">Pi-hat(q2)</span></code>) from correlator <code class="docutils literal"><span class="pre">G(t)</span></code>.</p>
+<p>The correlator is Fourier transformed to produce a function <code class="docutils literal"><span class="pre">Pi_hat</span></code>
+of (Euclidean) <em>q</em><sup>2</sup> suitable for use in <code class="xref py py-func docutils literal"><span class="pre">g2tools.a_mu()</span></code>.</p>
+<p>See Bernecker &amp; Meyer, EPJA47 (2011) 148 , arXiv:1107.4388 for details
+on the Fouier transformation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>G</strong> (<em>array</em>) &#8211; Current-current correlator in an array whose elements
+are <code class="docutils literal"><span class="pre">[G(0),G(a),G(2*a),...,G(-2*a),G(-a)]</span></code> if
+<code class="docutils literal"><span class="pre">periodic=True</span></code> or <code class="docutils literal"><span class="pre">[G(0),G(a),...,G(T*a-1)]</span></code>
+otherwise.</li>
+<li><strong>Z</strong> &#8211; Renormalization factor for current (moments multiplied by <code class="docutils literal"><span class="pre">Z**2</span></code>).
+Defaul is 1.</li>
+<li><strong>ainv</strong> &#8211; Inverse lattice spacing used to convert moments to
+physical units (n-th moment multiplied by <code class="docutils literal"><span class="pre">1/ainv**(n-2)</span></code>).
+Default is 1.</li>
+<li><strong>periodic</strong> &#8211; <code class="docutils literal"><span class="pre">periodic=True</span></code> implies <code class="docutils literal"><span class="pre">G[-t]</span> <span class="pre">=</span> <span class="pre">G[t]</span></code> (default);
+<code class="docutils literal"><span class="pre">periodic=False</span></code> implies no periodicity in array <code class="docutils literal"><span class="pre">G[t]</span></code>
+(and results doubled to account for negative <code class="docutils literal"><span class="pre">t</span></code>).</li>
 </ul>
 </td>
 </tr>

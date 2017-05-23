@@ -50,7 +50,7 @@ provided by the following code::
         print('Taylor coefficients:', g2.mom2taylor(mom))
         print()
 
-        # construct subtracted vac pol function using [2,2] Pade
+        # construct subtracted vac pol function using [2,2] Padé
         vpol = g2.vacpol(mom, order=(2,2))
 
         # integrate vpol to get a_mu and print result
@@ -60,7 +60,7 @@ provided by the following code::
 
         # error budget for a_mu
         print(gv.fmt_errorbudget(
-            outputs=dict(a_mu=a_mu, mom4=mom[4]),
+            outputs=dict(a_mu=amu, mom4=mom[4]),
             inputs=dict(G=G, Z=Z, ainv=ainv),
             ))
 
@@ -108,6 +108,25 @@ The contribution to the muon's anomalous magnetic moment is
 uncertainty is dominated by the uncertainty in the inverse
 lattice spacing ``ainv``; statistical errors from ``G`` are
 completely negligible in this example.
+
+An alternative to using moments is to Fourier transform the
+correlator to obtain ``vpol(q2)`` directly. Moments are particularly
+useful for analyzing finite-volume and other systematic errors, but
+the Fourier method is simpler to code::
+
+    # compute a_mu from the Fourier transform of G(t)
+    vpol = g2.fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True)
+    amu = g2.a_mu(vpol, Q=Q)
+    print('a_mu contribution =', amu)
+    print()
+
+    # error budget for a_mu
+    print(gv.fmt_errorbudget(
+        outputs=dict(a_mu=amu),
+        inputs=dict(G=G, Z=Z, ainv=ainv),
+        ))
+
+This code gives identical results to that above.
 
 |g2tools| is designed to work with module :mod:`gvar` which we use here
 to represent the statistical and systematic uncertainties in

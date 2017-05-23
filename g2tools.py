@@ -12,6 +12,8 @@ The functions or classes include:
     vacpol(mom)     --  create a Pade approximant for the subtracted
                         vacuum polarization (Pi-hat) from the jj correlator
                         whose moments (or Taylor coefs) are in mom.
+    fourier_vacpol(G)-- create subtracted vacuum polarization (``PI-hat``) by
+                        Fourier transforming *jj* correlator ``G(t)``.
     a_mu(pihat, Q)  --  compute the contribution to the muon's g-2
                         anomaly from function pihat (usually built by vacpol).
     pade_gvar(f,m,n)--  general-purpose code for determining Pade approximants
@@ -83,11 +85,12 @@ import collections
 
 import math
 
-__version__ = '1.0.1'
+__version__ = '1.1'
 
 # constants
 ALPHA = 1/137.035999074
 Mmu = 0.1056583715
+QMIN = 1e-15
 QMAX = 1e5
 TOL = 1e-8
 HMIN = 1e-12
@@ -130,7 +133,7 @@ def moments(G, Z=1., ainv=1., periodic=True, nlist=[4,6,8,10,12,14,16,18,20]):
         Gmom[n] = numpy.sum( t ** n * G) * pfac / ainv ** (n-2)
     return Gmom
 
-def a_mu(vacpol, Q=1, mmu=None, alpha=None, qmax=None, tol=None):
+def a_mu(vacpol, Q=1, mmu=None, alpha=None, qmin=None, qmax=None, rescale=None, tol=None):
     """ Compute contribution to g-2 anomaly a_mu = (g-2)/2 from vacuum polarization.
 
     Args:
@@ -139,10 +142,13 @@ def a_mu(vacpol, Q=1, mmu=None, alpha=None, qmax=None, tol=None):
             (See class :class:`vacpol`.)
         Q: Effective charge (in units of the proton's charge) --- for
             example, ``Q = 1./3. ``for s-quark loops (phi, etc) while
-            ``Q = sqrt(5./9.)`` for u/d loops (rho, etc).
-        mmu: Mass of the muon (default = Mmu).
-        alpha: QED coupling (default = ALPHA).
+            ``Q = sqrt(5./9.)`` for u/d loops (rho, etc). (Default is 1.)
+        mmu: Mass of the muon (default is ``g2tools.Mmu``).
+        alpha: QED coupling (default is ``g2tools.ALPHA``).
+        qmin: Maximum ``q`` included in integral (default is ``g2tools.QMIN = 1e-15``).
         qmax: Maximum ``q`` included in integral (default is ``g2tools.QMAX = 1e5``).
+        rescale: Rescales momentum in vacuum poln: ``vacpol(q2 * rescale**2)``
+            (default is 1).
         tol: Tolerance for integral over ``q2`` (default is ``g2tools.TOL = 1e-8``).
 
     Returns:
@@ -152,10 +158,15 @@ def a_mu(vacpol, Q=1, mmu=None, alpha=None, qmax=None, tol=None):
         mmu = Mmu
     if alpha is None:
         alpha = ALPHA
+    if qmin is None:
+        qmin = QMIN
     if qmax is None:
         qmax = QMAX
     if tol is None:
         tol = TOL
+    if rescale is None:
+        r2 = 1.
+    r2 = 1. if rescale is None else rescale * rescale
     if hasattr(vacpol, 'badpoles') and vacpol.badpoles():
         raise RuntimeError('bad poles in vacpol: ' + str(vacpol.poles))
     fac = Q**2 * 4 * numpy.pi * alpha * (alpha / numpy.pi)
@@ -168,9 +179,9 @@ def a_mu(vacpol, Q=1, mmu=None, alpha=None, qmax=None, tol=None):
         q = tantheta * mmu
         jac = 2 * q * mmu * (tantheta ** 2 + 1.)
         q2 = q ** 2
-        return jac * f_blum(q2) * vacpol(q2)
+        return jac * f_blum(q2) * vacpol(q2*r2)
     odeint = gvar.ode.Integrator(deriv=deriv, tol=tol, hmin=HMIN)
-    ans = odeint(0.0, interval=(1e-14, math.atan(qmax/mmu)))
+    ans = odeint(0.0, interval=(math.atan(qmin/mmu), math.atan(qmax/mmu)))
     return ans * fac
 
 def mom2taylor(mom):
@@ -188,6 +199,53 @@ def taylor2mom(tayl):
         n = 2 * i + 4
         ans[n] = (-1) ** (n/2) * math.factorial(n) * ci
     return ans
+
+class fourier_vacpol(object):
+    """ Subtracted vac. pol'n (``Pi-hat(q2)``) from correlator ``G(t)``.
+
+    The correlator is Fourier transformed to produce a function ``Pi_hat``
+    of (Euclidean) *q*\ :sup:`2` suitable for use in :func:`g2tools.a_mu`.
+
+    See Bernecker & Meyer, EPJA47 (2011) 148 , arXiv:1107.4388 for details
+    on the Fouier transformation.
+
+    Args:
+        G (array): Current-current correlator in an array whose elements
+            are ``[G(0),G(a),G(2*a),...,G(-2*a),G(-a)]`` if
+            ``periodic=True`` or ``[G(0),G(a),...,G(T*a-1)]``
+            otherwise.
+        Z: Renormalization factor for current (moments multiplied by ``Z**2``).
+            Defaul is 1.
+        ainv: Inverse lattice spacing used to convert moments to
+            physical units (n-th moment multiplied by ``1/ainv**(n-2)``).
+            Default is 1.
+        periodic: ``periodic=True`` implies ``G[-t] = G[t]`` (default);
+            ``periodic=False`` implies no periodicity in array ``G[t]``
+            (and results doubled to account for negative ``t``).
+    """
+    def __init__(self, G, Z=1., ainv=1., periodic=True):
+        G = numpy.array(G)
+        if periodic:
+            nG = len(G)
+            if nG % 2 == 0:
+                self.G = G[:nG // 2 + 1]
+                self.G[1:-1] += G[-1:nG // 2:-1]
+                self.G[1:-1] *= 0.5
+            else:
+                self.G = G[:nG//2 + 1]
+                self.G[1:] += G[-1:nG//2:-1]
+                self.G[1:] *= 0.5
+        else:
+            self.G = G
+        self.G *= Z**2 * ainv**2
+        self.t = numpy.arange(len(self.G)) / ainv   # q is in phys units
+        self.t2 = self.t ** 2
+
+    def __call__(self, q2):
+        return numpy.sum(
+            (self.t2 - 4 * (numpy.sin((q2 ** 0.5/2.) * self.t))**2 / q2) *
+            self.G
+            )
 
 class vacpol(object):
     """ Subtracted vac. pol'n (``Pi-hat(q2)``) from correlator moments ``Gmon[n]``.
@@ -273,7 +331,7 @@ class vacpol(object):
 
     @staticmethod
     def rescale(c, scale):
-        " Rescale coefficients ``c``. "
+        " Rescale coefficients ``c[j] -> c[j] / scale**j`` "
         return c / (scale ** numpy.arange(len(c)))
 
     def __call__(self, q2):
@@ -281,8 +339,17 @@ class vacpol(object):
             return self.vacpol_fcn(q2)
         return q2 * self.pseries['num'](q2) / self.pseries['den'](q2)
 
+    def taylor(self, n=None):
+        """ Return Taylor coefficients for ``PI-hat(q2)/q2``.
+
+        Args:
+            n: Maximum number of coefficients returned. Returns
+                all coefficents if ``None`` (default)/
+        """
+        return np.array(self.pseries['taylor'].c[:n])
+
     def badpoles(self, qth=0):
-        " False if any pole is complex or above threshold. "
+        " True if any pole is complex or above threshold. "
         return numpy.any(numpy.iscomplex(self.poles)) or numpy.any(self.poles > -(qth ** 2))
 
     @staticmethod
@@ -370,7 +437,6 @@ class vacpol(object):
         The decay constant is defined such that the vacuum polarization
         function is ``Pi-hat = q2 * f**2/2/m**2 / (q2 + m**2)``.
         """
-        n = 20
         j = numpy.arange(n) + 1.
         taylor_coef = f ** 2 / 2. / m ** (2 * j + 2) * (-1) ** (j + 1)
         order = (n - n // 2, n // 2)

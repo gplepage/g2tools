@@ -19,6 +19,10 @@ polarization. The functions or classes include:
         vacuum polarization (``PI-hat``) from the *jj* correlator
         whose moments (or Taylor coefficients) are in *mom*.
 
+    **fourier_vacpol(G)**
+        Create subtracted vacuum polarization (``PI-hat``) by
+        Fourier transforming *jj* correlator ``G(t)``.
+
     **a_mu(pihat, Q)**
         Compute the contribution to the muon's *g-2*
         anomaly from function pihat (usually built by vacpol).

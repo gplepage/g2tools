@@ -1,3 +1,18 @@
+Version 1.1 ????
+====================
+
+- New class fourier_vacpol that creates a subtracted vacuum polarization
+  function from the Fourier transform of G(t). This provides an alternative
+  to using moments of G(t).
+
+- New argument qmin for a_mu.
+
+- New method vacpol.taylor which returns Taylor coefficients
+  (shorthand for vpol.pseries['taylor'].c).
+
+- Small bug in vacpol.vector --- set n=20 no matter what n set to.
+
+
 Version 1.0.1  13/03/2017
 =========================
 Tiny change to make g2tools compatible with the latest lsqfit (v9).

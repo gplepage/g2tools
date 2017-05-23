@@ -23,10 +23,11 @@ The main tools for creating and manipulating moments are:
 Subtracted Vacuum Polarization
 -------------------------------
 A subtracted vacuum polarization function (``Pi-hat``) is
-represented by the following class:
+represented by the following classes:
 
 .. autoclass:: g2tools.vacpol
 
+.. autoclass:: g2tools.fourier_vacpol
 
 Padé Approximants
 -------------------

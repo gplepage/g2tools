@@ -245,6 +245,59 @@ class test_g2tools(unittest.TestCase):
                 assert abs(amu_pade / amu_exact - 1.) < 0.01
             optprint(5 * '-')
 
+    def test_exact_vs_fourier(self):
+        " a_mu from pade vs from function"
+        optprint('\n=========== Test exact vs fourier')
+        # fake data --- N=3 states
+        N = 3
+        ainv = 2.5
+        Z = 1.5
+        # the following are in lattice units, simulating lattice output
+        m = np.array([0.5, 1.0, 1.5])[:N, None]
+        t = np.arange(100)[None,:]
+        G = np.sum(m / 4 * np.exp(-t*m), axis=0) / Z**2
+
+        # fourier analysis
+        fvpol = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False)
+        a_mu_fourier = a_mu(fvpol, qmax=1000.)
+        optprint('a_mu from fourier: {}'.format(a_mu_fourier))
+
+        # exact result for 1, 2, and 3 states
+        for n in range(1, N+1):
+            a_mu_exact = np.sum(
+                [a_mu(vacpol.vector(mi*ainv)) * ainv**2 for mi in m[:n]]
+                )
+            optprint('a_mu from {} states: {}'.format(n, a_mu_exact))
+        self.assertLess(abs(1 - a_mu_fourier/a_mu_exact), 1e-4)
+
+    def test_exact_vs_fourier_periodic(self):
+        " a_mu from pade vs from function"
+        optprint('\n=========== Test exact vs fourier')
+        # loop over len(G) = even and odd
+        for start in [-2, -1]:
+            # fake data --- N=3 states
+            N = 3
+            ainv = 2.5
+            Z = 1.5
+            # the following are in lattice units, simulating lattice output
+            m = np.array([0.5, 1.0, 1.5])[:N, None]
+            t = np.arange(100)
+            t = np.concatenate((t, t[start:0:-1]))
+            G = np.sum(m / 4 * np.exp(-t*m), axis=0) / Z**2
+
+            # fourier analysis
+            fvpol = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True)
+            a_mu_fourier = a_mu(fvpol, qmax=1000.)
+            optprint('a_mu from fourier: {}'.format(a_mu_fourier))
+
+            # exact result for 1, 2, and 3 states
+            for n in range(1, N+1):
+                a_mu_exact = np.sum(
+                    [a_mu(vacpol.vector(mi*ainv)) * ainv**2 for mi in m[:n]]
+                    )
+                optprint('a_mu from {} states: {}'.format(n, a_mu_exact))
+            self.assertLess(abs(1 - a_mu_fourier/a_mu_exact), 1e-4)
+
 if __name__ == '__main__':
     unittest.main()
 
