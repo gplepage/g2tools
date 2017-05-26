@@ -85,7 +85,7 @@ import collections
 
 import math
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 # constants
 ALPHA = 1/137.035999074
@@ -297,8 +297,11 @@ class vacpol(object):
             Pade approximant. This is normally set automatically
             (from the standard deviations of the moments), but the
             automatic value is overridden if ``rtol`` is specified.
+        warn: ``warn=True`` causes a warning to be issued when there are
+            bad poles in the Pade or when the order has been reduced
+            automatically. ``warn=False`` (default) suppresses the warnings.
     """
-    def __init__(self, g, order=None, scale=None, rtol=None):
+    def __init__(self, g, order=None, scale=None, rtol=None, warn=False):
         f = mom2taylor(g) if hasattr(g, 'keys') else g
         if order is None:
             n = len(g)
@@ -328,6 +331,11 @@ class vacpol(object):
             )
         self.order = (len(p), len(q) - 1)
         self.poles = numpy.polynomial.polynomial.polyroots(gvar.mean(self.pseries['den'].c))
+        if warn == True:
+            if self.badpoles():
+                warnings.warn('bad poles: {}'.format(self.poles))
+            if self.order != order:
+                warnings.warn('reduced order: {}'.format(self.order))
 
     @staticmethod
     def rescale(c, scale):
@@ -346,7 +354,7 @@ class vacpol(object):
             n: Maximum number of coefficients returned. Returns
                 all coefficents if ``None`` (default)/
         """
-        return np.array(self.pseries['taylor'].c[:n])
+        return numpy.array(self.pseries['taylor'].c[:n])
 
     def badpoles(self, qth=0):
         " True if any pole is complex or above threshold. "

@@ -1,5 +1,14 @@
-Version 1.1 ????
-====================
+Version 1.2 2017-05-25
+======================
+
+- Bug fix so vacpol.taylor() works.
+
+- New option warn in vacpol. Setting warn=True causes a warning to be
+  issued if either badpoles() is True or if the order of the Pade is
+  reduced.
+
+Version 1.1 2017-05-23
+======================
 
 - New class fourier_vacpol that creates a subtracted vacuum polarization
   function from the Fourier transform of G(t). This provides an alternative

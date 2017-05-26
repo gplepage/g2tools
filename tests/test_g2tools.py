@@ -1,7 +1,7 @@
 """
 test_g2tools.py
 """
-# Copyright (c) 2016 G. Peter Lepage.
+# Copyright (c) 2016-17 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -183,7 +183,7 @@ class test_g2tools(unittest.TestCase):
         # test at mK
         pihat_exact = vacpol.fermion(m=0.4937)
         exact = a_mu(pihat_exact)
-        pihat = vacpol(pihat_exact.pseries['taylor'].c, (9,9))
+        pihat = vacpol(pihat_exact.taylor(), (9,9))
         amu = a_mu(pihat)
         print_result('1loop(mK):', amu, exact, pihat)
         assert numpy.allclose(amu/exact, 1., rtol=1e-5)
@@ -191,7 +191,7 @@ class test_g2tools(unittest.TestCase):
         # mK with noise
         tayl = [
             ci * gvar.gvar('1.00(1)')
-            for ci in pihat_exact.pseries['taylor'].c
+            for ci in pihat_exact.taylor()
             ]
         pihat = vacpol(tayl, (2,2))
         amu = a_mu(pihat)
@@ -201,7 +201,7 @@ class test_g2tools(unittest.TestCase):
         # test at mpi
         pihat_exact = vacpol.fermion(m=MPI)
         exact = a_mu(pihat_exact)
-        pihat = vacpol(pihat_exact.pseries['taylor'].c, (9,9))
+        pihat = vacpol(pihat_exact.taylor(), (9,9))
         amu = a_mu(pihat)
         print_result('1loop(mpi):', amu, exact, pihat)
         assert numpy.allclose(amu/exact, 1., rtol=1e-4)
@@ -209,7 +209,7 @@ class test_g2tools(unittest.TestCase):
         # mpi with noise
         tayl = [
             ci * gvar.gvar('1.00(1)')
-            for ci in pihat_exact.pseries['taylor'].c
+            for ci in pihat_exact.taylor()
             ]
         pihat = vacpol(tayl, (2,2))
         amu = a_mu(pihat)
