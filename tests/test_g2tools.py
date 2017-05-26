@@ -211,7 +211,7 @@ class test_g2tools(unittest.TestCase):
             ci * gvar.gvar('1.00(1)')
             for ci in pihat_exact.taylor()
             ]
-        pihat = vacpol(tayl, (2,2))
+        pihat = vacpol(tayl, (2,2), warn=True)
         amu = a_mu(pihat)
         print_result('1loop(mpi):', amu, exact, pihat)
         assert numpy.allclose(amu.mean/exact, 1., rtol=1e-2)
@@ -297,6 +297,27 @@ class test_g2tools(unittest.TestCase):
                     )
                 optprint('a_mu from {} states: {}'.format(n, a_mu_exact))
             self.assertLess(abs(1 - a_mu_fourier/a_mu_exact), 1e-4)
+
+    def test_warn(self):
+        " vacpol(warn=True) "
+        # vacpol.scalar(MPI).taylor()
+        tayl = np.array([  1.08361463e-02,  -3.97340348e-02,   2.26639708e-01,
+            -1.58653778e+00,   1.25300529e+01,  -1.07205606e+02,
+             9.71193290e+02,  -9.18408638e+03,   8.98033421e+04,
+            -9.01971926e+05])
+        tayl = tayl * gv.gvar(len(tayl) * ['1.00(1)'])
+        tayl += np.array([  5.12534367e-05,  -2.70757996e-04,   5.49464167e-04,
+            -2.69828134e-02,   9.43691955e-02,  -1.64530731e+00,
+             4.97938388e-02,  -1.10418131e+01,  -7.24696697e+02,
+             2.59030047e+04])
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            vpol = vacpol(tayl, rtol=1e-14, warn=True, qth=2*MPI, order=(3,3))
+            self.assertEqual(w[-1].message[0][:9], 'bad poles')
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            vpol = vacpol(tayl, warn=True, qth=2*MPI, order=(3,3))
+            self.assertEqual(w[-1].message[0][:13], 'reduced order')
 
 if __name__ == '__main__':
     unittest.main()

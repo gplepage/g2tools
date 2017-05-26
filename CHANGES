@@ -1,3 +1,16 @@
+Version 1.2.1 2017-05-26
+========================
+
+- Bug fix for unusual crashes of pade_svd.
+
+- New option qth for vacpol.
+
+- More tests.
+
+- Default rtol for pade_gvar is now set equal to the geometric
+  mean of the ratios f[i].sdev/abs(f[i].mean) for each of the
+  Taylor coefficients f[i].
+
 Version 1.2 2017-05-25
 ======================
 

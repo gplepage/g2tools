@@ -85,7 +85,7 @@ import collections
 
 import math
 
-__version__ = '1.2'
+__version__ = '1.2.1'
 
 # constants
 ALPHA = 1/137.035999074
@@ -297,12 +297,15 @@ class vacpol(object):
             Pade approximant. This is normally set automatically
             (from the standard deviations of the moments), but the
             automatic value is overridden if ``rtol`` is specified.
+        qth: Threshold for particle production: poles above ``-qth**2``
+            are bad. Default is ``qth=0``.
         warn: ``warn=True`` causes a warning to be issued when there are
             bad poles in the Pade or when the order has been reduced
             automatically. ``warn=False`` (default) suppresses the warnings.
     """
-    def __init__(self, g, order=None, scale=None, rtol=None, warn=False):
+    def __init__(self, g, order=None, scale=None, rtol=None, qth=0, warn=False):
         f = mom2taylor(g) if hasattr(g, 'keys') else g
+        self.qth = qth
         if order is None:
             n = len(g)
             order = (n - n // 2, n // 2)
@@ -356,8 +359,15 @@ class vacpol(object):
         """
         return numpy.array(self.pseries['taylor'].c[:n])
 
-    def badpoles(self, qth=0):
-        " True if any pole is complex or above threshold. "
+    def badpoles(self, qth=None):
+        """ True if any pole is complex or above threshold.
+
+        Args:
+            qth: Threshold for particle production: poles above ``-qth**2``
+                are bad. (Default is ``qth=0``.)
+        """
+        if qth is None:
+            qth = self.qth
         return numpy.any(numpy.iscomplex(self.poles)) or numpy.any(self.poles > -(qth ** 2))
 
     @staticmethod
@@ -468,14 +478,18 @@ def pade_gvar(f, m, n, rtol=None):
     the order of the approximant if the extraction of Pade coefficients
     is too unstable given noise in the input data.
 
-    :param f: Array ``f[i]`` of power series coefficients for ``i=0...n+m``.
-    :param m: Maximum order of polynomial in numerator of Pade
-        approximant (``m>=0``).
-    :param n: Maximum order of polynomial in denominator of Pade
-        approximant (``m>=0``).
-    :param rtol: Relative accuracy of input coefficients. Overrides
-        default estimate from the ``f[i]`` unless set equal to ``None``.
-    :returns: Tuple of power series coefficients ``(p, q)`` such that
+    Args:
+        f: Array ``f[i]`` of power series coefficients for ``i=0...n+m``.
+        m: Maximum order of polynomial in numerator of Pade
+            approximant (``m>=0``).
+        n: Maximum order of polynomial in denominator of Pade
+            approximant (``m>=0``).
+        rtol: Relative accuracy of input coefficients. Overrides
+            default estimate from the ``f[i]`` unless set equal to ``None``.
+            (Default estimate is the geometric mean of the relative errors
+            in the ``f[i]``.)
+    Returns:
+        Tuple of power series coefficients ``(p, q)`` such that
         ``sum_i p[i] x**i`` is the numerator of the approximant,
         and ``sum_i q[i] x**i`` is the denominator. ``q[0]`` is
         normalized to 1.
@@ -493,11 +507,26 @@ def pade_gvar(f, m, n, rtol=None):
 
     # compute tolerance if not specifiec
     if rtol is None:
-        rtol = gvar.sdev(numpy.sum(c))
-        if rtol == 0:
-            rtol = 1e-14
+        means = numpy.fabs(gvar.mean(c))
+        sdevs = gvar.sdev(c)
+        idx = means > 0.0
+        if numpy.any(idx) and numpy.any(sdevs[idx] > 0):
+            # geometric mean
+            rtol = numpy.exp(
+                numpy.average(numpy.log(sdevs[idx] / means[idx]))
+                )
         else:
-            rtol /= numpy.sum(numpy.abs(gvar.mean(c)))
+            rtol = 1e-14
+    elif rtol > 0:
+        rtol = rtol
+    else:
+        rtol = 1e-14
+
+        # rtol = gvar.sdev(numpy.sum(c))
+        # if rtol == 0:
+        #     rtol = 1e-14
+        # else:
+        #     rtol /= numpy.sum(numpy.abs(gvar.mean(c)))
 
     # find approximate means
     p, q = pade_svd(gvar.mean(c), m, n, rtol=rtol)
@@ -548,13 +577,14 @@ def pade_svd(f, m, n, rtol=1e-14):
         approximant (``m>=0``).
     :param n: Maximum order of polynomial in denominator of Pade
         approximant (``m>=0``).
-    :param rtol: Relative accuracy of input coefficients.
+    :param rtol: Relative accuracy of input coefficients. (Default is 1e-14.)
     :returns: Tuple of power series coefficients ``(p, q)`` such that
         ``sum_i p[i] x**i`` is the numerator of the approximant,
         and ``sum_i q[i] x**i`` is the denominator. ``q[0]`` is
         normalized to 1.
     """
     linalg = scipy.linalg
+    msave = m
     c = numpy.array(f[:n + m + 1], float)
     if len(f) < (m + n + 1):
         raise ValueError(
@@ -562,17 +592,17 @@ def pade_svd(f, m, n, rtol=1e-14):
             )
     ts = rtol * linalg.norm(c)
     if linalg.norm(c[:m + 1]) <= rtol * linalg.norm(c):
-        a = numpy.array([0.])
+        # return power series through order m
+        a = numpy.array(c[:1])
         b = numpy.array([1.])
-        mu = None
-        nu = 0
     else:
         row = numpy.zeros(n+1)
         row[0] = c[0]
         col = c
         while True:
             if n == 0:
-                a = c[:m+1]
+                # return the power series through order m
+                a = c[:m + 1]
                 b = numpy.array([1.])
                 return a, b
             Z = linalg.toeplitz(col[:m + n + 1], row[:n + 1])
@@ -582,6 +612,8 @@ def pade_svd(f, m, n, rtol=1e-14):
                 break
             m -= n - rho
             n = rho
+            if m < 0:
+                m = 0
         if n > 0:
             # use svd to get solution b, but only to normalize C
             # then use QR decomposition to get final b
@@ -596,10 +628,11 @@ def pade_svd(f, m, n, rtol=1e-14):
             b = b[lam:]
             a = a[lam:]
             b = b[:numpy.where(abs(b) > rtol)[0][-1] + 1]
-        try:
-            a = a[:numpy.where(abs(a) > ts)[0][-1] + 1]
-        except IndexError:
+        idx = abs(a) > ts
+        if not numpy.any(idx):
             a = a[:1]
-        a = a/b[0]
-        b = b/b[0]
+        else:
+            a = a[:numpy.where(idx)[0][-1] + 1]
+        a = a / b[0]
+        b = b / b[0]
     return a, b

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>g2tools Module &mdash; g2tools 1.2 documentation</title>
+    <title>g2tools Module &mdash; g2tools 1.2.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2',
+        VERSION:     '1.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="g2tools 1.2 documentation" href="index.html" />
+    <link rel="top" title="g2tools 1.2.1 documentation" href="index.html" />
     <link rel="prev" title="Muon g-2 from Lattice QCD using g2tools" href="overview.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="overview.html" title="Muon g-2 from Lattice QCD using g2tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">g2tools 1.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">g2tools 1.2.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -111,7 +111,7 @@ Default is 1.</li>
 represented by the following classes:</p>
 <dl class="class">
 <dt id="g2tools.vacpol">
-<em class="property">class </em><code class="descclassname">g2tools.</code><code class="descname">vacpol</code><span class="sig-paren">(</span><em>g</em>, <em>order=None</em>, <em>scale=None</em>, <em>rtol=None</em>, <em>warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.vacpol" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">g2tools.</code><code class="descname">vacpol</code><span class="sig-paren">(</span><em>g</em>, <em>order=None</em>, <em>scale=None</em>, <em>rtol=None</em>, <em>qth=0</em>, <em>warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.vacpol" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subtracted vac. pol&#8217;n (<code class="docutils literal"><span class="pre">Pi-hat(q2)</span></code>) from correlator moments <code class="docutils literal"><span class="pre">Gmon[n]</span></code>.</p>
 <p>The vacuum polarization function is a Pade approximant to the Taylor
 series corresponding to the moments <code class="docutils literal"><span class="pre">g[n]</span></code>.  The code estimates the
@@ -165,6 +165,8 @@ but the automatic value is overridden if <code class="docutils literal"><span cl
 Pade approximant. This is normally set automatically
 (from the standard deviations of the moments), but the
 automatic value is overridden if <code class="docutils literal"><span class="pre">rtol</span></code> is specified.</li>
+<li><strong>qth</strong> &#8211; Threshold for particle production: poles above <code class="docutils literal"><span class="pre">-qth**2</span></code>
+are bad. Default is <code class="docutils literal"><span class="pre">qth=0</span></code>.</li>
 <li><strong>warn</strong> &#8211; <code class="docutils literal"><span class="pre">warn=True</span></code> causes a warning to be issued when there are
 bad poles in the Pade or when the order has been reduced
 automatically. <code class="docutils literal"><span class="pre">warn=False</span></code> (default) suppresses the warnings.</li>
@@ -242,7 +244,7 @@ is too unstable given tolerance <code class="docutils literal"><span class="pre"
 approximant (<code class="docutils literal"><span class="pre">m&gt;=0</span></code>).</li>
 <li><strong>n</strong> &#8211; Maximum order of polynomial in denominator of Pade
 approximant (<code class="docutils literal"><span class="pre">m&gt;=0</span></code>).</li>
-<li><strong>rtol</strong> &#8211; Relative accuracy of input coefficients.</li>
+<li><strong>rtol</strong> &#8211; Relative accuracy of input coefficients. (Default is 1e-14.)</li>
 </ul>
 </td>
 </tr>
@@ -279,7 +281,9 @@ approximant (<code class="docutils literal"><span class="pre">m&gt;=0</span></co
 <li><strong>n</strong> &#8211; Maximum order of polynomial in denominator of Pade
 approximant (<code class="docutils literal"><span class="pre">m&gt;=0</span></code>).</li>
 <li><strong>rtol</strong> &#8211; Relative accuracy of input coefficients. Overrides
-default estimate from the <code class="docutils literal"><span class="pre">f[i]</span></code> unless set equal to <code class="docutils literal"><span class="pre">None</span></code>.</li>
+default estimate from the <code class="docutils literal"><span class="pre">f[i]</span></code> unless set equal to <code class="docutils literal"><span class="pre">None</span></code>.
+(Default estimate is the geometric mean of the relative errors
+in the <code class="docutils literal"><span class="pre">f[i]</span></code>.)</li>
 </ul>
 </td>
 </tr>
@@ -344,7 +348,7 @@ normalized to 1.</p>
         <li class="right" >
           <a href="overview.html" title="Muon g-2 from Lattice QCD using g2tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">g2tools 1.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">g2tools 1.2.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
