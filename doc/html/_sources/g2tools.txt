@@ -27,6 +27,21 @@ represented by the following classes:
 
 .. autoclass:: g2tools.vacpol
 
+    Methods include:
+
+    .. automethod:: g2tools.vacpol.taylor
+
+    .. automethod:: g2tools.vacpol.badpoles
+
+    .. automethod:: g2tools.vacpol.FT
+
+    .. automethod:: g2tools.vacpol.scalar
+
+    .. automethod:: g2tools.vacpol.fermion
+
+    .. automethod:: g2tools.vacpol.vector
+
+
 .. autoclass:: g2tools.fourier_vacpol
 
 Padé Approximants

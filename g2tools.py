@@ -53,11 +53,6 @@ included::
 
 This code requires the following Python modules: numpy, scipy, lsqfit, and gvar.
 The last two are available on pypi and also at https://github.com/gplepage.
-
-The code can be tested by running ``python g2tools.py``. Everything is
-probably alright if there are no assertion errors. This code works with both
-python2 (version > 2.7) and python3 (version > 3.4). Feel free to
-contact g.p.lepage@cornell.edu if there are persistent problems.
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-09-13.
@@ -85,7 +80,9 @@ import collections
 
 import math
 
-__version__ = '1.2.1'
+__version__ = '1.3'
+
+USE_SCIPY_PADE = False
 
 # constants
 ALPHA = 1/137.035999074
@@ -95,14 +92,15 @@ QMAX = 1e5
 TOL = 1e-8
 HMIN = 1e-12
 
-def moments(G, Z=1., ainv=1., periodic=True, nlist=[4,6,8,10,12,14,16,18,20]):
+def moments(G, Z=1., ainv=1., periodic=True, tmin=None, nlist=[4,6,8,10,12,14,16,18,20]):
     """ Compute t**n moments of correlator G.
 
     Compute ``sum_t t**n G(t)`` for ``n`` in ``nlist``, where both positive and
     negative ``t`` are included.
 
     Args:
-        G: Array of correlator values ``G[t]`` for ``t=0,1...``.
+        G: Array of correlator values ``G[t]`` for ``t=0,1...`` (in
+            lattice units).
         Z: Renormalization factor for current (moments multiplied by ``Z**2``).
             Defaul is 1.
         ainv: Inverse lattice spacing used to convert moments to
@@ -111,6 +109,8 @@ def moments(G, Z=1., ainv=1., periodic=True, nlist=[4,6,8,10,12,14,16,18,20]):
         periodic: ``periodic=True`` implies ``G[-t] = G[t]`` (default);
             ``periodic=False`` implies no periodicity in array ``G[t]``
             (and results doubled to account for negative ``t``).
+        tmin: minimum ``t`` value included in moments; ignored
+            if ``None`` (default).
         nlist: List of moments to calculate. Default is
             ``nlist=[4,6,8...20]``.
 
@@ -119,21 +119,28 @@ def moments(G, Z=1., ainv=1., periodic=True, nlist=[4,6,8,10,12,14,16,18,20]):
     """
     nt = len(G)
     if periodic:
-        # sum over tmin <= t <= tmax
-        tmax = math.floor(nt/2.)
-        tmin = tmax - nt + 1.
-        t = numpy.concatenate((numpy.arange(0., tmax + 1.), numpy.arange(tmin, 0.)))
+        # sum over t1 <= t <= t2
+        t2 = math.floor(nt/2.)
+        t1 = t2 - nt + 1.
+        t = numpy.concatenate((numpy.arange(0., t2 + 1.), numpy.arange(t1, 0.)))
         pfac = Z ** 2
     else:
         # sum over 0 <= t < nt and double, to account for t<0.
         t = numpy.arange(nt * 1.)
         pfac = 2. * Z ** 2
     Gmom = gvar.BufferDict()
+    if tmin is not None:
+        idx = numpy.fabs(t) >= tmin
+        t = t[idx]
+        G = G[idx]
     for n in nlist:
         Gmom[n] = numpy.sum( t ** n * G) * pfac / ainv ** (n-2)
     return Gmom
 
-def a_mu(vacpol, Q=1, mmu=None, alpha=None, qmin=None, qmax=None, rescale=None, tol=None):
+def a_mu(
+    vacpol, Q=1, mmu=None, alpha=None, qmin=None, qmax=None, rescale=None,
+    tol=None, exceptions=True
+    ):
     """ Compute contribution to g-2 anomaly a_mu = (g-2)/2 from vacuum polarization.
 
     Args:
@@ -150,6 +157,9 @@ def a_mu(vacpol, Q=1, mmu=None, alpha=None, qmin=None, qmax=None, rescale=None, 
         rescale: Rescales momentum in vacuum poln: ``vacpol(q2 * rescale**2)``
             (default is 1).
         tol: Tolerance for integral over ``q2`` (default is ``g2tools.TOL = 1e-8``).
+        exceptions: If ``True`` (default), an exception is raised if there
+            are bad poles in the ``vacpol``. If ``False``, exceptions are
+            suppressed.
 
     Returns:
         Value of ``a_mu`` corresponding to ``Q**2 * vacpol``.
@@ -167,7 +177,7 @@ def a_mu(vacpol, Q=1, mmu=None, alpha=None, qmin=None, qmax=None, rescale=None, 
     if rescale is None:
         r2 = 1.
     r2 = 1. if rescale is None else rescale * rescale
-    if hasattr(vacpol, 'badpoles') and vacpol.badpoles():
+    if exceptions and hasattr(vacpol, 'badpoles') and vacpol.badpoles():
         raise RuntimeError('bad poles in vacpol: ' + str(vacpol.poles))
     fac = Q**2 * 4 * numpy.pi * alpha * (alpha / numpy.pi)
     def f_blum(q2):
@@ -213,15 +223,15 @@ class fourier_vacpol(object):
         G (array): Current-current correlator in an array whose elements
             are ``[G(0),G(a),G(2*a),...,G(-2*a),G(-a)]`` if
             ``periodic=True`` or ``[G(0),G(a),...,G(T*a-1)]``
-            otherwise.
-        Z: Renormalization factor for current (moments multiplied by ``Z**2``).
-            Defaul is 1.
-        ainv: Inverse lattice spacing used to convert moments to
-            physical units (n-th moment multiplied by ``1/ainv**(n-2)``).
-            Default is 1.
+            otherwise. ``G`` is assumed to be in lattice units.
+        Z: Renormalization factor for current (correlator multiplied
+            by ``Z**2``). Defaul is 1.
+        ainv: Inverse lattice spacing used to convert Fourier transform to
+            physical units. Default is 1.
         periodic: ``periodic=True`` implies ``G[-t] = G[t]`` (default);
-            ``periodic=False`` implies no periodicity in array ``G[t]``
-            (and results doubled to account for negative ``t``).
+            ``periodic=False`` implies ``G[t]`` is not periodic and
+            is specified for only non-negative ``t`` values
+            (results are doubled to account for negative ``t``).
     """
     def __init__(self, G, Z=1., ainv=1., periodic=True):
         G = numpy.array(G)
@@ -237,18 +247,26 @@ class fourier_vacpol(object):
                 self.G[1:] *= 0.5
         else:
             self.G = G
-        self.G *= Z**2 * ainv**2
-        self.t = numpy.arange(len(self.G)) / ainv   # q is in phys units
+        # In next expression should be ainv**3 except for factor of 1/ainv
+        # associated with the t integral in __call__. So self.G_ainv is
+        # G / ainv.
+        self.G_ainv = self.G * Z**2 * ainv**2
+        self.t = numpy.arange(len(self.G_ainv)) / ainv   # q is in phys units
         self.t2 = self.t ** 2
 
     def __call__(self, q2):
+        # N.B. factor of 1/ainv needed for t-integral inncluded in self.G
         return numpy.sum(
             (self.t2 - 4 * (numpy.sin((q2 ** 0.5/2.) * self.t))**2 / q2) *
-            self.G
+            self.G_ainv
             )
 
 class vacpol(object):
     """ Subtracted vac. pol'n (``Pi-hat(q2)``) from correlator moments ``Gmon[n]``.
+
+    The current-current correlator is ``q2 * Pi(q2)``, where
+    ``Pi-hat(q2) = Pi(q2) - Pi(0)`` is the subtracted (i.e., renormalized)
+    vacuum polariztion function.
 
     The vacuum polarization function is a Pade approximant to the Taylor
     series corresponding to the moments ``g[n]``.  The code estimates the
@@ -268,7 +286,9 @@ class vacpol(object):
     tests the poles in the denomator of the Pade. ``badpoles(qth)`` returns
     ``False`` if any of the poles is complex or if any are located above
     ``-(qth ** 2)``. ``qth`` should be set equal to the threshold energy for
-    the correlator. If it is unset, ``qth=0`` is used.
+    the correlator. If it is unset, ``qth=0`` is used. Lists of the
+    poles and their residues (for ``Pi-hat(q2)``) are available in
+    attributes ``pole`` and ``residue``, respectively.
 
     :class:`vacpol` has several static methods for creating specialized
     examples of vacuum polarizations (e.g., for testing):
@@ -299,11 +319,17 @@ class vacpol(object):
             automatic value is overridden if ``rtol`` is specified.
         qth: Threshold for particle production: poles above ``-qth**2``
             are bad. Default is ``qth=0``.
-        warn: ``warn=True`` causes a warning to be issued when there are
-            bad poles in the Pade or when the order has been reduced
-            automatically. ``warn=False`` (default) suppresses the warnings.
+        warnings: ``warnings=True`` causes a warning to be issued when the
+            order has been reduced automatically. ``warnings=False`` (default)
+            suppresses the warnings.
+        exceptions: If ``True`` (default), an exception is raised if there
+            are bad poles in the ``vacpol``. If ``False``, exceptions are
+            suppressed.
     """
-    def __init__(self, g, order=None, scale=None, rtol=None, qth=0, warn=False):
+    def __init__(
+        self, g, order=None, scale=None, rtol=None, qth=0,
+        warn=True, exceptions=True
+        ):
         f = mom2taylor(g) if hasattr(g, 'keys') else g
         self.qth = qth
         if order is None:
@@ -324,8 +350,8 @@ class vacpol(object):
         if scale != 1:
             p = self.rescale(p, 1./scale)
             q = self.rescale(q, 1./scale)
-        self.fit = pade_gvar.fit
-        self.rtol = pade_gvar.rtol
+        # self.fit = pade_gvar.fit
+        # self.rtol = pade_gvar.rtol
         self.pseries = dict(
             taylor=gvar.powerseries.PowerSeries(f),
             scaled_taylor=gvar.powerseries.PowerSeries(fscaled),
@@ -333,12 +359,61 @@ class vacpol(object):
             den=gvar.powerseries.PowerSeries(q),
             )
         self.order = (len(p), len(q) - 1)
-        self.poles = numpy.polynomial.polynomial.polyroots(gvar.mean(self.pseries['den'].c))
+        self.poles = numpy.polynomial.polynomial.polyroots(
+            gvar.mean(self.pseries['den'].c)
+            )
+        if (exceptions and (
+            numpy.any(numpy.iscomplex(self.poles)) or
+            numpy.any(self.poles > -(self.qth ** 2))
+            )):
+            raise ValueError(
+                'bad poles (try reducing the order): ' +
+                str(self.poles)
+                )
         if warn == True:
-            if self.badpoles():
-                warnings.warn('bad poles: {}'.format(self.poles))
             if self.order != order:
                 warnings.warn('reduced order: {}'.format(self.order))
+            if self.badpoles():
+                warnings.warn('bad poles: {}', str(self.poles))
+        # Fourier parameters
+        num = self.pseries['num']
+        den = self.pseries['den']
+        res = []
+        pole = []
+        # add errors to poles and residues
+        def add_sdev(poly, p):
+            if not isinstance(poly(p), gvar.GVar):
+                return p
+            nc = gvar.mean(poly.c) + gvar.gvar(len(poly.c) * ['0(0)'])
+            np = p + gvar.gvar('0(0)')
+            npoly =  gvar.powerseries.PowerSeries(nc)
+            npoly_np = npoly(np)
+            dpoly_dp = npoly_np.deriv(np)
+            for (nci,ci) in zip(npoly.c, poly.c):
+                if not isinstance(ci, gvar.GVar):
+                    continue
+                p = p - npoly_np.deriv(nci) * (ci - ci.mean) / dpoly_dp
+            return p
+        for p in self.poles:
+            pole.append(add_sdev(den, p))
+            res.append(num(pole[-1]) * pole[-1] / den.c[-1])
+        for i,p in enumerate(pole):
+            other_p = numpy.array(pole[:i] + pole[i+1:])
+            res[i] /= numpy.prod(p-other_p)
+        # residue is residue of pole in Pi-hat(q2) (not q2 * Pi-hat(q2))
+        self.residues = numpy.array(res)
+        self.poles = numpy.array(pole)
+        self.E = (-self.poles) ** 0.5
+        # ampl is amplitude for q2 * Pi-hat(q2) hence extra factor of pole.
+        self.ampl = self.residues * self.poles/ 2. / self.E
+        # calculate residual polynomial - not used for anything!
+        # q2 = gvar.powerseries.PowerSeries(
+        #     [0., 1.], order=num.order - den.order + 1
+        #     )
+        # self.direct = (
+        #     q2 * num / den -
+        #     numpy.sum( [r / (q2 - p) for r,p in zip(self.residues, self.poles)])
+        #     )
 
     @staticmethod
     def rescale(c, scale):
@@ -369,6 +444,46 @@ class vacpol(object):
         if qth is None:
             qth = self.qth
         return numpy.any(numpy.iscomplex(self.poles)) or numpy.any(self.poles > -(qth ** 2))
+
+    def FT(self, t, ainv=1.):
+        """ Fourier transform of ``q2 * PI-hat(q2)``.
+
+        The Pade approximant can be decomposed into a sum of poles (partial
+        fractions), which give a sum of decaying exponentials when Fourier
+        transformed back to t-space. The amplitudes and energies of these
+        exponentials (for the transform of ``q2 * Pi-hat(q2)'') are stored in
+        :class:`g2tools.vacpol` attributes ``E`` and ``ampl``, respectively.
+
+        The decomposition into a sum of poles leaves a residual polynomial in
+        ``q2`` (zeroth-order for ``(n,n)`` Pades). This is ignored in the
+        Fourier transform since it typically affects the transform only for
+        very small ``t``. These terms have a negligible effect (suppressed by
+        ``a**2j`` on the Taylor coefficients ``Pi[j]`` of ``Pi-hat(q2)``
+        (for j>=1).
+
+        Optional parameter ``ainv`` can be used to convert the Fourier
+        transform to lattice units (by multiplying it by ``1/ainv**3``) for
+        comparison with simulation data. The times ``t`` are then
+        assumed to be in lattice units.
+
+        Args:
+            t (number, array): Time in physical units unless ``ainv``
+                is specified, in which case lattice units are assumed.
+            ainv: Inverse lattice spacing. The Fourier transform is in lattice
+                units if ``ainv`` is specified (assuming the original
+                Taylor coefficients are in physical units).
+        """
+        # Need 1/ainv**3 to put G(t) into lattice units.
+        if numpy.shape(t) == ():
+            return numpy.sum(self.ampl * numpy.exp(-self.E*t)) / ainv ** 3
+        else:
+            tshape = numpy.shape(t)
+            t = numpy.asarray(t).flatten() / ainv
+            ans = numpy.sum(
+                self.ampl[:, None] * numpy.exp(-self.E[:, None]*t[None, :]),
+                axis=0
+                )
+            return ans.reshape(tshape)/ ainv ** 3
 
     @staticmethod
     def fermion(m, n=19, use_pade=False):
@@ -449,7 +564,7 @@ class vacpol(object):
         return vpol
 
     @staticmethod
-    def vector(m, f=1, n=10, use_pade=False):
+    def vector(m, f=1., n=10, use_pade=False):
         """ Vac. pol'n due to a vector with mass ``m`` and decay const. ``f``.
 
         The decay constant is defined such that the vacuum polarization
@@ -457,7 +572,7 @@ class vacpol(object):
         """
         j = numpy.arange(n) + 1.
         taylor_coef = f ** 2 / 2. / m ** (2 * j + 2) * (-1) ** (j + 1)
-        order = (n - n // 2, n // 2)
+        order = [(0,0), (1,0), (1,1)][min(2, n)]
         vpol = vacpol(taylor_coef, order=order)
         def vacpol_fcn(q2):
             return q2 * f ** 2 / (q2 + m ** 2) / 2. /m**2
@@ -465,7 +580,7 @@ class vacpol(object):
             vpol.vacpol_fcn = vacpol_fcn
         return vpol
 
-def pade_gvar(f, m, n, rtol=None):
+def pade_gvar(f, m, n, rtol='gavg'):
     """ ``[m,n]`` Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\s.
 
     The ``[m,n]`` Pade approximant to a series given by
@@ -473,7 +588,7 @@ def pade_gvar(f, m, n, rtol=None):
     (numerator) and ``n`` (denominator) whose  Taylor expansion agrees
     with that of the original series up to order ``m+n``.
 
-    This code uses an *svd* algorithm (see :func:`pade_svd`) to deal with
+    This code uses an SVD algorithm (see :func:`pade_svd`) to deal with
     imprecision in the input data. It automatically reduces
     the order of the approximant if the extraction of Pade coefficients
     is too unstable given noise in the input data.
@@ -484,10 +599,13 @@ def pade_gvar(f, m, n, rtol=None):
             approximant (``m>=0``).
         n: Maximum order of polynomial in denominator of Pade
             approximant (``m>=0``).
-        rtol: Relative accuracy of input coefficients. Overrides
-            default estimate from the ``f[i]`` unless set equal to ``None``.
-            (Default estimate is the geometric mean of the relative errors
-            in the ``f[i]``.)
+        rtol (float or str): If ``rtol`` is a string, it determines how the
+            relative tolerance is determined from the relative
+            uncertainties in the ``f[i]``. Set ``rtol`` equal to:
+            ``'gavg'`` for the geometric mean (default); ``'avg'`` for
+            the average; ``'min'`` for the minimum; or ``'max'`` for
+            the maximum. Otherwise a number can be specified, in which case
+            the uncertainties in ``f[i]`` are ignored.
     Returns:
         Tuple of power series coefficients ``(p, q)`` such that
         ``sum_i p[i] x**i`` is the numerator of the approximant,
@@ -495,67 +613,66 @@ def pade_gvar(f, m, n, rtol=None):
         normalized to 1.
     """
     # check inputs
-    if not numpy.any([isinstance(fi, gvar.GVar) for fi in f]):
-        pade_gvar.fit = None
-        pade_gvar.rtol = rtol
-        return pade_svd(f, m, n, rtol=1e-14 if rtol is None else rtol)
-    c = numpy.array(f[:n + m + 1])
+    assert m >= 0 and n >= 0
+    f = f[:n + m + 1]
     if len(f) < (m + n + 1):
         raise ValueError(
             'not enough f[i]s -- need {} have {}'.format(n + m + 1, len(f))
             )
+    if not numpy.any([isinstance(fi, gvar.GVar) for fi in f]):
+        pade_gvar.rtol = 1e-14
+        return pade_svd(f, m, n)
+    else:
+        c = numpy.array(f)
 
-    # compute tolerance if not specifiec
-    if rtol is None:
+    # compute tolerance if not specified
+    if rtol in ['avg', 'min', 'max', 'gavg']:
         means = numpy.fabs(gvar.mean(c))
         sdevs = gvar.sdev(c)
         idx = means > 0.0
-        if numpy.any(idx) and numpy.any(sdevs[idx] > 0):
-            # geometric mean
-            rtol = numpy.exp(
-                numpy.average(numpy.log(sdevs[idx] / means[idx]))
-                )
+        if numpy.any(idx) and numpy.all(sdevs[idx] > 0):
+            ratio = sdevs[idx] / means[idx]
+            if rtol == 'gavg':
+                # geometric mean
+                rtol = numpy.exp(
+                    numpy.average(numpy.log(ratio))
+                    )
+            elif rtol == 'avg':
+                rtol = numpy.average(ratio)
+            elif rtol == 'min':
+                rtol = numpy.min(ratio)
+            else:
+                rtol = numpy.max(ratio)
         else:
             rtol = 1e-14
-    elif rtol > 0:
-        rtol = rtol
+    elif rtol is not None:
+        rtol = numpy.fabs(rtol)
     else:
         rtol = 1e-14
+    pade_gvar.rtol = rtol
 
-        # rtol = gvar.sdev(numpy.sum(c))
-        # if rtol == 0:
-        #     rtol = 1e-14
-        # else:
-        #     rtol /= numpy.sum(numpy.abs(gvar.mean(c)))
-
-    # find approximate means
+    # find Pade coefficientw
     p, q = pade_svd(gvar.mean(c), m, n, rtol=rtol)
-    p0 = dict(num=p, den=q[1:])
     m = len(p) - 1
     n = len(q) - 1
 
-    # fit to insert errors
-    def fitfcn(p):
-        order = m + n
-        num = gvar.powerseries.PowerSeries(p['num'], order=order)
-        den = gvar.powerseries.PowerSeries([1.] + p['den'].tolist(), order=order)
-        ratio = num / den
-        return ratio.c
-    fit = lsqfit.nonlinear_fit(
-        data=c[:n + m + 1],
-        fcn=fitfcn,
-        p0=p0,
-        tol=1e-10,
-        debug=True
+    # add uncertainties
+    p = p * gvar.gvar(len(p) * ['1(0)'])
+    q = q[1:] * gvar.gvar(len(q[1:]) * ['1(0)'])
+    num = gvar.powerseries.PowerSeries(p, order=m + n)
+    den = gvar.powerseries.PowerSeries([1] + list(q), order=m + n)
+    pade = numpy.concatenate((p,q))
+    cc = (num / den).c
+    M = numpy.empty((len(pade), len(pade)), float)
+    for i in range(len(pade)):
+        for j in range(len(pade)):
+            M[i, j] = cc[i].deriv(pade[j])
+    pade = pade + gvar.linalg.solve(M, (c - gvar.mean(c))[:len(pade)])
+    return (
+        numpy.array(pade[:m + 1]),
+        numpy.array([gvar.gvar(1,0)] + list(pade[m + 1:]))
         )
-    if fit.chi2 > 1.:
-        warnings.warn('bad fit: chi2 = {}'.format(fit.chi2))
 
-    # save intermediate results in case they are needed later
-    pade_gvar.fit = fit
-    pade_gvar.rtol = rtol
-    pade_gvar.p0 = p0
-    return fit.p['num'], numpy.array([1.] + fit.p['den'].tolist())
 
 def pade_svd(f, m, n, rtol=1e-14):
     """ ``[m,n]`` Pade approximant to ``sum_i f[i] x**i``.
@@ -584,12 +701,15 @@ def pade_svd(f, m, n, rtol=1e-14):
         normalized to 1.
     """
     linalg = scipy.linalg
-    msave = m
+    mn_save = m,n
     c = numpy.array(f[:n + m + 1], float)
     if len(f) < (m + n + 1):
         raise ValueError(
             'not enough f[i]s -- need {} have {}'.format(n + m + 1, len(f))
             )
+    if USE_SCIPY_PADE:
+        p, q = scipy.misc.pade(c, n)
+        return numpy.array(p.c[::-1]), numpy.array(q.c[::-1])
     ts = rtol * linalg.norm(c)
     if linalg.norm(c[:m + 1]) <= rtol * linalg.norm(c):
         # return power series through order m
@@ -635,4 +755,12 @@ def pade_svd(f, m, n, rtol=1e-14):
             a = a[:numpy.where(idx)[0][-1] + 1]
         a = a / b[0]
         b = b / b[0]
-    return a, b
+    # Ending modified so that an approximant for non-zero rtol
+    # is the same as the reduced-order approximant evaluated with
+    # zero rtol; any approximant returned by the algorithm should
+    # be an exact approximant to the input. Thus rtol determines the
+    # order of the final approximant, but does not affect the values
+    # of the approximant's coefficients. This is not true of the original.
+    mfinal = len(a) - 1
+    nfinal = len(b) - 1
+    return (a,b) if (mfinal,nfinal) == mn_save else pade_svd(f, mfinal, nfinal)
