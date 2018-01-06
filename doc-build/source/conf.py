@@ -15,6 +15,19 @@
 import sys
 import os
 import shlex
+
+try:
+    from unittest.mock import MagicMock
+    class Mock(MagicMock):
+        @classmethod
+        def __getattr__(cls, name):
+                return MagicMock()
+
+    MOCK_MODULES = ['gvar', 'numpy', 'lsqfit', 'scipy.misc', 'scipy.linalg', 'scipy']
+    sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+except:
+    pass
+
 import g2tools
 
 # If extensions (or modules to document with autodoc) are in another directory,
