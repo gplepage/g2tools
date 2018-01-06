@@ -157,10 +157,11 @@ examples of vacuum polarizations (e.g., for testing):</p>
 or array containing Taylor coefficients where
 <code class="docutils literal"><span class="pre">Pi-hat(q2)</span> <span class="pre">=</span> <span class="pre">q2</span> <span class="pre">*</span> <span class="pre">sum_j</span> <span class="pre">q2**j</span> <span class="pre">*</span> <span class="pre">g[j]</span></code>.</li>
 <li><strong>order</strong> – Tuple <code class="docutils literal"><span class="pre">(m,n)</span></code> specifying the order of the Pade
-approximant used to approximate the function. The order may
-be reduced (automatically) if the data are too noisy.
-If the order is not specified, it is set automatically
-according to the number of entries in <code class="docutils literal"><span class="pre">G</span></code>.</li>
+approximant used to approximate <code class="docutils literal"><span class="pre">Pi-hat(q2)</span></code> (the function is
+approximated by <code class="docutils literal"><span class="pre">q2</span></code> times an <code class="docutils literal"><span class="pre">(m-1,n)</span></code> approximant). The
+order may be reduced (automatically) if the data are too noisy. If
+the order is not specified, it is set automatically according to
+the number of entries in <code class="docutils literal"><span class="pre">G</span></code>.</li>
 <li><strong>scale</strong> – Scale factor used to rescale <code class="docutils literal"><span class="pre">q2</span></code> so that
 the Taylor coefficients are more uniform in size. This is
 normally set automatically (from the first two moments),
@@ -171,8 +172,8 @@ Pade approximant. This is normally set automatically
 automatic value is overridden if <code class="docutils literal"><span class="pre">rtol</span></code> is specified.</li>
 <li><strong>qth</strong> – Threshold for particle production: poles above <code class="docutils literal"><span class="pre">-qth**2</span></code>
 are bad. Default is <code class="docutils literal"><span class="pre">qth=0</span></code>.</li>
-<li><strong>warnings</strong> – <code class="docutils literal"><span class="pre">warnings=True</span></code> causes a warning to be issued when the
-order has been reduced automatically. <code class="docutils literal"><span class="pre">warnings=False</span></code> (default)
+<li><strong>warnings</strong> – <code class="docutils literal"><span class="pre">warnings=True</span></code> (default) causes a warning to be issued
+when the order has been reduced automatically. <code class="docutils literal"><span class="pre">warnings=False</span></code>
 suppresses the warnings.</li>
 <li><strong>exceptions</strong> – If <code class="docutils literal"><span class="pre">True</span></code> (default), an exception is raised if there
 are bad poles in the <code class="docutils literal"><span class="pre">vacpol</span></code>. If <code class="docutils literal"><span class="pre">False</span></code>, exceptions are
