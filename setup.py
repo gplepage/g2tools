@@ -1,17 +1,17 @@
 from distutils.core import setup
-import g2tools
+# import g2tools
 
 import os
 if os.environ.get('READTHEDOCS') == 'True':
     requires = []
     install_requires = []
 else:
-    requires = ["lsqfit (>=9.1)", 'numpy (>=1.7)', 'gvar (>=7.3)', 'scipy'],
-    install_requires = ['lsqfit>=9.1', 'gvar>=7.3', 'numpy>=1.7', 'scipy'],
+    requires = ["lsqfit (>=9.1)", 'numpy (>=1.7)', 'gvar (>=7.3)', 'scipy']
+    install_requires = ['lsqfit>=9.1', 'gvar>=7.3', 'numpy>=1.7', 'scipy']
 
 
 setup(name='g2tools',
-    version=g2tools.__version__,
+    version='1.3', # g2tools.__version__,
     description='Utilities for muon g-2 analyses in lattice QCD.',
     author='G. Peter Lepage, Cornell University',
     author_email='g.p.lepage@cornell.edu',
