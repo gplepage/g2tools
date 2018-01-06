@@ -32,15 +32,15 @@ untry:
 	- cat files-g2tools.$(PYTHONVERSION) | xargs rm -rf
 
 doc-html:
-	rm -rf doc/html; sphinx-build -b html doc/source doc/html
+	rm -rf doc-build/html; sphinx-build -b html doc-build/source doc-build/html
 
 doc-pdf:
-	rm -rf doc/g2tools.pdf
-	sphinx-build -b latex doc/source doc/latex
-	cd doc/latex; make g2tools.pdf; mv g2tools.pdf ..
+	rm -rf doc-build/g2tools.pdf
+	sphinx-build -b latex doc-build/source doc-build/latex
+	cd doc-build/latex; make g2tools.pdf; mv g2tools.pdf ..
 
 doc-zip doc.zip:
-	cd doc/html; zip -r doc *; mv doc.zip ../..
+	cd doc-build/html; zip -r doc *; mv doc.zip ../..
 
 doc-all: doc-html doc-pdf doc-zip
 
@@ -81,9 +81,9 @@ clean:
 	rm -rf __pycache__
 	rm -f *.so *.tmp *.pyc *.prof *.c .coverage doc.zip
 	rm -f -r dist
-	rm -f -r doc/build
+	rm -f -r doc-build/build
 	rm -f -r src/g2tools/*.c
-	$(MAKE) -C doc/source clean
+	$(MAKE) -C doc-build/source clean
 	$(MAKE) -C tests clean
 	$(MAKE) -C examples clean
 
