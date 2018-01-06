@@ -305,10 +305,11 @@ class vacpol(object):
             or array containing Taylor coefficients where
             ``Pi-hat(q2) = q2 * sum_j q2**j * g[j]``.
         order: Tuple ``(m,n)`` specifying the order of the Pade
-            approximant used to approximate the function. The order may
-            be reduced (automatically) if the data are too noisy.
-            If the order is not specified, it is set automatically
-            according to the number of entries in ``G``.
+            approximant used to approximate ``Pi-hat(q2)`` (the function is
+            approximated by ``q2`` times an ``(m-1,n)`` approximant). The
+            order may be reduced (automatically) if the data are too noisy. If
+            the order is not specified, it is set automatically according to
+            the number of entries in ``G``.
         scale: Scale factor used to rescale ``q2`` so that
             the Taylor coefficients are more uniform in size. This is
             normally set automatically (from the first two moments),
@@ -319,8 +320,8 @@ class vacpol(object):
             automatic value is overridden if ``rtol`` is specified.
         qth: Threshold for particle production: poles above ``-qth**2``
             are bad. Default is ``qth=0``.
-        warnings: ``warnings=True`` causes a warning to be issued when the
-            order has been reduced automatically. ``warnings=False`` (default)
+        warnings: ``warnings=True`` (default) causes a warning to be issued
+            when the order has been reduced automatically. ``warnings=False``
             suppresses the warnings.
         exceptions: If ``True`` (default), an exception is raised if there
             are bad poles in the ``vacpol``. If ``False``, exceptions are

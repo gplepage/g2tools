@@ -54,4 +54,4 @@ Chakraborty *et al*, Phys.Rev. D89 (2014) no.11, 114501. Google
 ``arXiv:1403.1778`` to find a preprint on the web.
 
 Created by G. Peter Lepage (Cornell University) on on 2014-09-13.
-Copyright (c) 20014-16 G. Peter Lepage.
+Copyright (c) 20014-17 G. Peter Lepage.
