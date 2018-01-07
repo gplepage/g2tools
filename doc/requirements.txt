@@ -1,2 +1,2 @@
 cython>=0.17
-gvar>=7.3
+gvar>=8.0
