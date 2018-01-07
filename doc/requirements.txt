@@ -1,3 +1,2 @@
 cython>=0.17
-scipy
 gvar>=7.3
