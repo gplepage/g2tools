@@ -70,7 +70,6 @@ The last two are available on pypi and also at https://github.com/gplepage.
 
 import gvar
 import numpy
-import lsqfit
 import scipy.misc
 import scipy.linalg
 import scipy

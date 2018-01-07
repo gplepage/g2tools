@@ -2,12 +2,12 @@ from distutils.core import setup
 # import g2tools
 
 import os
-if os.environ.get('READTHEDOCS') == 'True':
-    requires = []
-    install_requires = []
-else:
-    requires = ["lsqfit (>=9.1)", 'numpy (>=1.7)', 'gvar (>=7.3)', 'scipy']
-    install_requires = ['lsqfit>=9.1', 'gvar>=7.3', 'numpy>=1.7', 'scipy']
+# if os.environ.get('READTHEDOCS') == 'True':
+#     requires = []
+#     install_requires = []
+# else:
+requires = ['numpy (>=1.7)', 'gvar (>=7.3)', 'scipy']
+install_requires = ['gvar>=7.3', 'numpy>=1.7', 'scipy']
 
 
 setup(name='g2tools',
