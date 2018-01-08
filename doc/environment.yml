@@ -4,11 +4,7 @@ channels:
 dependencies:
 - python>=3.5
 - cython
-- h5py
-- hdf5
 - numpy
-- scipy
 - pip:
   - gvar>=8.0
-  - g2tools
 
