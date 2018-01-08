@@ -1,0 +1,10 @@
+formats:
+    - htmlzip
+    - epub
+    - pdf
+
+conda:
+  file: doc/environment.yml
+
+python:
+  version: 3
