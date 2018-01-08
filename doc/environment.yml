@@ -1,4 +1,4 @@
-name: test
+name: documentation
 channels:
 - defaults
 dependencies:

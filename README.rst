@@ -42,8 +42,8 @@ Information on how to install the module is in the file INSTALLATION.
 
 To test the module try ``make tests``.
 
-Documentation is in the doc directory --- open doc/html/index.html.
-A pdf version is in doc/g2tools.pdf.
+Documentation is in the doc directory --- open doc/html/index.html
+or look online at <https://g2tools.readthedocs.io>.
 
 The examples directory has a complete example, showing how to go from Monte
 Carlo data for a *jj* correlator to a contribution to the muon's magnetic
@@ -54,4 +54,4 @@ Chakraborty *et al*, Phys.Rev. D89 (2014) no.11, 114501. Google
 ``arXiv:1403.1778`` to find a preprint on the web.
 
 Created by G. Peter Lepage (Cornell University) on on 2014-09-13.
-Copyright (c) 20014-17 G. Peter Lepage.
+Copyright (c) 20014-18 G. Peter Lepage.
