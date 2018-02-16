@@ -70,7 +70,14 @@ The last two are available on pypi and also at https://github.com/gplepage.
 
 import gvar
 import numpy
-import scipy.misc
+try:
+    from scipy.special import factorial as scipy_factorial
+except:
+    from scipy.misc import factorial as scipy_factorial
+try:
+    from scipy.interpolate import pade as scipy_pade
+except:
+    scipy_pade = scipy.misc.pade
 import scipy.linalg
 import scipy
 import sys
@@ -540,7 +547,7 @@ class vacpol(object):
     def scalar(m, n=10, use_pade=False):
         """ 1-loop subt. vac. pol'n from a scalar with mass m (and charge=1). """
         j = numpy.arange(n) + 1.
-        fact = scipy.misc.factorial
+        fact = scipy_factorial
         taylor_coef = (1/ 8. / numpy.pi**2) * (-1) ** (j+1) / m ** (2 * j) * (
             fact(j + 1) * fact(j - 1) * 1. / fact(2 * j + 3)
             )
@@ -707,7 +714,7 @@ def pade_svd(f, m, n, rtol=1e-14):
             'not enough f[i]s -- need {} have {}'.format(n + m + 1, len(f))
             )
     if USE_SCIPY_PADE:
-        p, q = scipy.misc.pade(c, n)
+        p, q = scipy_pade(c, n)
         return numpy.array(p.c[::-1]), numpy.array(q.c[::-1])
     ts = rtol * linalg.norm(c)
     if linalg.norm(c[:m + 1]) <= rtol * linalg.norm(c):

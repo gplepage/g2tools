@@ -53,12 +53,11 @@ class test_g2tools(unittest.TestCase):
     def test_pade_svd(self):
         " pade_svd(tayl, n, m) "
         optprint('\n=========== Test pade_svd')
-        from scipy.misc import pade
         # Taylor expansion for exp(x)
         e_exp = [1.0, 1.0, 1.0/2.0, 1.0/6.0, 1.0/24.0, 1.0/120.0]
 
         # test against scipy
-        p0, q0 = pade(e_exp, 2)
+        p0, q0 = scipy_pade(e_exp, 2)
         p0 = p0.c[-1::-1]
         q0 = q0.c[-1::-1]
         p, q = pade_svd(e_exp, 3, 2)
@@ -73,7 +72,7 @@ class test_g2tools(unittest.TestCase):
             ))
 
         # now with 10% errors --- automatically reduces to (2,1)
-        p0, q0 = pade(e_exp[:4], 1)
+        p0, q0 = scipy_pade(e_exp[:4], 1)
         p0 = p0.c[::-1]
         q0 = q0.c[::-1]
         p, q = pade_svd(e_exp, 3, 2, rtol=0.1)
@@ -118,10 +117,9 @@ class test_g2tools(unittest.TestCase):
     def test_pade_gvar(self):
         " pade_gvar(tayl, m, n) "
         optprint('\n=========== Test pade_gvar')
-        from scipy.misc import pade
         e_exp = [1.0, 1.0, 1.0/2.0, 1.0/6.0, 1.0/24.0, 1.0/120.0, 1.0/720.]
-        def scipy_pade(m, n):
-            p, q = scipy.misc.pade(e_exp[:m + n + 1], n)
+        def _scipy_pade(m, n):
+            p, q = scipy_pade(e_exp[:m + n + 1], n)
             return p.c[-1::-1], q.c[-1::-1]
         def print_result(p, q):
             optprint('num =', p)
@@ -130,7 +128,7 @@ class test_g2tools(unittest.TestCase):
             m = len(p) - 1
             n = len(q) - 1
             # test against scipy
-            p0, q0 = scipy_pade(m, n)
+            p0, q0 = _scipy_pade(m, n)
             try:
                 assert numpy.allclose(gvar.mean(p), p0)
             except:
@@ -143,7 +141,7 @@ class test_g2tools(unittest.TestCase):
             assert numpy.allclose(gvar.mean(ratio), 1.)
             assert numpy.allclose(gvar.sdev(ratio), 0.0)
 
-        # print('scipy', scipy_pade(1,1), pade_svd(e_exp, 3,2, rtol=0.01))
+        # print('scipy', _scipy_pade(1,1), pade_svd(e_exp, 3,2, rtol=0.01))
         # 1% noise --- automatically reduces to (2,1)
         e_exp_noise = [x * gvar.gvar('1.0(1)') for x in e_exp]
         p, q = pade_gvar(e_exp_noise, 3, 2)
