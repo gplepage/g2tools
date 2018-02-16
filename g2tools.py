@@ -79,8 +79,6 @@ import collections
 
 import math
 
-__version__ = '1.3'
-
 USE_SCIPY_PADE = False
 
 # constants

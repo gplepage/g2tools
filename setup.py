@@ -9,17 +9,20 @@ import os
 requires = ['numpy (>=1.7)', 'gvar (>=7.3)', 'scipy']
 install_requires = ['gvar>=7.3', 'numpy>=1.7', 'scipy']
 
+G2TOOLS_VERSION = '1.3'
+
+with open('g2tools.py', 'a') as gfile:
+    gfile.write("\n__version__ = '%s'\n" % G2TOOLS_VERSION)
 
 setup(name='g2tools',
-    version='1.3', # g2tools.__version__,
+    version=G2TOOLS_VERSION,
     description='Utilities for muon g-2 analyses in lattice QCD.',
     author='G. Peter Lepage, Cornell University',
     author_email='g.p.lepage@cornell.edu',
     license='GPLv3+',
     py_modules=['g2tools'],
-    requires=requires,
-    install_requires=install_requires,
-    setup_requires=install_requires,
+    requires=requires,                  # for docutils
+    install_requires=install_requires,  # for pip
     platforms="Any",
     url="https://github.com/gplepage/g2tools.git",
     long_description="""\
@@ -62,6 +65,8 @@ setup(name='g2tools',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Scientific/Engineering :: Physics'
         ]
 
