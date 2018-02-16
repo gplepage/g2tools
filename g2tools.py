@@ -568,7 +568,8 @@ class vacpol(object):
         """ Vac. pol'n due to a vector with mass ``m`` and decay const. ``f``.
 
         The decay constant is defined such that the vacuum polarization
-        function is ``Pi-hat = q2 * f**2/2/m**2 / (q2 + m**2)``.
+        function is ``Pi-hat = q2 * f**2/2/m**2 / (q2 + m**2)``. This
+        corresponds in ``t`` space to ``m * f**2 * exp(-m * t) / 4''.
         """
         j = numpy.arange(n) + 1.
         taylor_coef = f ** 2 / 2. / m ** (2 * j + 2) * (-1) ** (j + 1)

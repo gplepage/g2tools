@@ -17,3 +17,4 @@ git-instructions
 *.sublime-*
 doc/html/_static/dialog-todo.png
 doc/latex/
+tmp/
