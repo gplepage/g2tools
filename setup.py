@@ -19,6 +19,7 @@ setup(name='g2tools',
     py_modules=['g2tools'],
     requires=requires,
     install_requires=install_requires,
+    setup_requires=install_requires,
     platforms="Any",
     url="https://github.com/gplepage/g2tools.git",
     long_description="""\
