@@ -4,7 +4,7 @@ from distutils.core import setup
 requires = ['numpy (>=1.7)', 'gvar (>=7.3)', 'scipy']
 install_requires = ['gvar>=7.3', 'numpy>=1.7', 'scipy']
 
-G2TOOLS_VERSION = '1.3.1'
+G2TOOLS_VERSION = '1.3.2'
 
 with open('g2tools.py', 'a') as gfile:
     gfile.write("\n__version__ = '%s'\n" % G2TOOLS_VERSION)
