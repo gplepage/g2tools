@@ -14,7 +14,7 @@
 PIP = python -m pip
 PYTHON = python
 PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
-VERSION = `python -c 'import g2tools; print g2tools.__version__'`
+VERSION = `cd ../..; python -c 'import g2tools; print g2tools.__version__'`
 
 install :
 	$(PIP) install . --user
