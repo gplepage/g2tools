@@ -1,15 +1,10 @@
 from distutils.core import setup
 # import g2tools
 
-import os
-# if os.environ.get('READTHEDOCS') == 'True':
-#     requires = []
-#     install_requires = []
-# else:
 requires = ['numpy (>=1.7)', 'gvar (>=7.3)', 'scipy']
 install_requires = ['gvar>=7.3', 'numpy>=1.7', 'scipy']
 
-G2TOOLS_VERSION = '1.3'
+G2TOOLS_VERSION = '1.3.1'
 
 with open('g2tools.py', 'a') as gfile:
     gfile.write("\n__version__ = '%s'\n" % G2TOOLS_VERSION)
