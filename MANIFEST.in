@@ -1,4 +1,5 @@
 include makefile README INSTALLATION COPYING MANIFEST.in CHANGES
+include src/*.py
 
 graft doc
 graft tests
@@ -8,6 +9,7 @@ exclude tests/*.pyc
 exclude tests/*.p
 exclude examples/*.tmp
 exclude examples/*.pyc
+exclude src/*.pyc
 exclude examples/*.p
 recursive-exclude doc/source/_build *
 prune dist build __pycache__
