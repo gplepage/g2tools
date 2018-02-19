@@ -76,7 +76,8 @@ upload-pypi:
 upload-git:
 	echo  "version $(VERSION)"
 	make doc-all
-	git diff-index HEAD
+	git diff --exit-code
+	git diff --cached --exit-code
 	git push origin master
 
 tag-git:
