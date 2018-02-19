@@ -56,7 +56,7 @@ The last two are available on pypi and also at https://github.com/gplepage.
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-09-13.
-# Copyright (c) 2014-2017 G. Peter Lepage.
+# Copyright (c) 2014-2018 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ def a_mu(
         alpha: QED coupling (default is ``g2tools.ALPHA``).
         qmin: Maximum ``q`` included in integral (default is ``g2tools.QMIN = 1e-15``).
         qmax: Maximum ``q`` included in integral (default is ``g2tools.QMAX = 1e5``).
-        rescale: Rescales momentum in vacuum poln: ``vacpol(q2 * rescale**2)``
+        rescale: Rescales momentum in vacuum pol.: ``vacpol(q2 * rescale**2)``
             (default is 1).
         tol: Tolerance for integral over ``q2`` (default is ``g2tools.TOL = 1e-8``).
         exceptions: If ``True`` (default), an exception is raised if there
@@ -266,7 +266,7 @@ class fourier_vacpol(object):
             )
 
 class vacpol(object):
-    """ Subtracted vac. pol'n (``Pi-hat(q2)``) from correlator moments ``Gmon[n]``.
+    """ Subtracted vac. pol'n (``Pi-hat(q2)``) from correlator moments ``g[n]``.
 
     The current-current correlator is ``q2 * Pi(q2)``, where
     ``Pi-hat(q2) = Pi(q2) - Pi(0)`` is the subtracted (i.e., renormalized)
@@ -570,11 +570,11 @@ class vacpol(object):
 
     @staticmethod
     def vector(m, f=1., n=10, use_pade=False):
-        """ Vac. pol'n due to a vector with mass ``m`` and decay const. ``f``.
+        """ Vac. pol. due to a vector with mass ``m`` and decay const. ``f``.
 
         The decay constant is defined such that the vacuum polarization
         function is ``Pi-hat = q2 * f**2/2/m**2 / (q2 + m**2)``. This
-        corresponds in ``t`` space to ``m * f**2 * exp(-m * t) / 4''.
+        corresponds in ``t`` space to ``m * f**2 * exp(-m * t) / 4``.
         """
         j = numpy.arange(n) + 1.
         taylor_coef = f ** 2 / 2. / m ** (2 * j + 2) * (-1) ** (j + 1)

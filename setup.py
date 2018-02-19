@@ -1,13 +1,18 @@
+from distutils.command.build_py import build_py as _build_py
 from distutils.core import setup
-# import g2tools
 
 requires = ['numpy (>=1.7)', 'gvar (>=7.3)', 'scipy']
 install_requires = ['gvar>=7.3', 'numpy>=1.7', 'scipy']
 
-G2TOOLS_VERSION = '1.3.2'
+G2TOOLS_VERSION = '1.3.3'
 
-with open('g2tools.py', 'a') as gfile:
-    gfile.write("\n__version__ = '%s'\n" % G2TOOLS_VERSION)
+class build_py(_build_py):
+    def run(self):
+        """ Append version number to g2tools.py """
+        print 20*'x', 'hi'
+        with open('src/g2tools.py', 'a') as gfile:
+            gfile.write("\n__version__ = '%s'\n" % G2TOOLS_VERSION)
+        _build_py.run(self)
 
 setup(name='g2tools',
     version=G2TOOLS_VERSION,
@@ -15,7 +20,10 @@ setup(name='g2tools',
     author='G. Peter Lepage, Cornell University',
     author_email='g.p.lepage@cornell.edu',
     license='GPLv3+',
-    py_modules=['g2tools'],
+    package_dir={'':'src'},
+    packages={''},
+    cmdclass={'build_py': build_py},
+    # py_modules=['g2tools'],
     requires=requires,                  # for docutils
     install_requires=install_requires,  # for pip
     platforms="Any",

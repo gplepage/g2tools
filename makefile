@@ -1,5 +1,5 @@
 # Created by G. Peter Lepage (Cornell University) on 2016-08-20.
-# Copyright (c) 2016-17 G. Peter Lepage.
+# Copyright (c) 2016-18 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,12 +14,12 @@
 PIP = python -m pip
 PYTHON = python
 PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
-VERSION = `cd ../..; python -c 'import g2tools; print g2tools.__version__'`
+VERSION = `cd ..; python -c 'import g2tools; print g2tools.__version__'`
 
-install :
+install-user :
 	$(PIP) install . --user
 
-install-sys :
+install install-sys :
 	$(PIP) install .
 
 uninstall :			# mostly works (may leave some empty directories)

@@ -10,6 +10,12 @@
 
 .. |GVar| replace:: :class:`gvar.GVar`
 
+g-2 Anomaly
+-------------
+The main tool for calculating the muon's anomaly is:
+
+.. autofunction:: g2tools.a_mu
+
 Moments
 ----------
 The main tools for creating and manipulating moments are:
