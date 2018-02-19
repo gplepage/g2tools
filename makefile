@@ -16,6 +16,9 @@ PYTHON = python
 PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
 VERSION = `cd ..; python -c 'import g2tools; print g2tools.__version__'`
 
+DOCFILES :=  $(shell ls doc/source/*.{rst,py})
+SRCFILES := $(shell ls setup.py src/*.{py,pyx})
+
 install-user :
 	$(PIP) install . --user
 
@@ -34,19 +37,13 @@ untry:
 doc-html:
 	make doc/html/index.html
 
-doc/html/index.html : src/g2tools.py setup.py \
-	doc/source/g2tools.rst doc/source/index.rst \
-	doc/source/ doc/source/overview.rst \
-	doc/source/conf.py
+doc/html/index.html : $(DOCFILES) $(SRCFILES)
 	rm -rf doc/html; sphinx-build -b html doc/source doc/html
 
 doc-pdf:
 	make doc/g2tools.pdf
 
-doc/g2tools.pdf : src/g2tools.py setup.py \
-	doc/source/g2tools.rst doc/source/index.rst \
-	doc/source/ doc/source/overview.rst \
-	doc/source/conf.py
+doc/g2tools.pdf : $(DOCFILES) $(SRCFILES)
 	rm -rf doc/g2tools.pdf
 	sphinx-build -b latex doc/source doc/latex
 	cd doc/latex; make g2tools.pdf; mv g2tools.pdf ..
@@ -75,7 +72,7 @@ upload-pypi:
 
 upload-git:
 	echo  "version $(VERSION)"
-	make doc-all
+	make doc-html doc-pdf
 	git diff --exit-code
 	git diff --cached --exit-code
 	git push origin master
