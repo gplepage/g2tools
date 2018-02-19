@@ -12,7 +12,7 @@
 
 g-2 Anomaly
 -------------
-The main tool for calculating the anomaly is:
+The main tool for calculating the muon's anomaly is:
 
 .. autofunction:: g2tools.a_mu
 

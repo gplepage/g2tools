@@ -32,9 +32,21 @@ untry:
 	- cat files-g2tools.$(PYTHONVERSION) | xargs rm -rf
 
 doc-html:
+	make doc/html/index.html
+
+doc/html/index.html : src/g2tools.py setup.py \
+	doc/source/g2tools.rst doc/source/index.rst \
+	doc/source/ doc/source/overview.rst \
+	doc/source/conf.py
 	rm -rf doc/html; sphinx-build -b html doc/source doc/html
 
 doc-pdf:
+	make doc/g2tools.pdf
+
+doc/g2tools.pdf : src/g2tools.py setup.py \
+	doc/source/g2tools.rst doc/source/index.rst \
+	doc/source/ doc/source/overview.rst \
+	doc/source/conf.py
 	rm -rf doc/g2tools.pdf
 	sphinx-build -b latex doc/source doc/latex
 	cd doc/latex; make g2tools.pdf; mv g2tools.pdf ..
@@ -64,7 +76,7 @@ upload-pypi:
 upload-git:
 	echo  "version $(VERSION)"
 	make doc-all
-	git commit -a -m "prep documentation for upload"
+	git commit -a
 	git push origin master
 
 tag-git:
