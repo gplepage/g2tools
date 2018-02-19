@@ -54,7 +54,7 @@ doc/g2tools.pdf : src/g2tools.py setup.py \
 doc-zip doc.zip:
 	cd doc/html; zip -r doc *; mv doc.zip ../..
 
-doc-all: doc-html doc-pdf doc-zip
+doc-all: doc-html doc-pdf
 
 sdist:			# source distribution
 	$(PYTHON) setup.py sdist
