@@ -56,7 +56,7 @@ The last two are available on pypi and also at https://github.com/gplepage.
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-09-13.
-# Copyright (c) 2014-2018 G. Peter Lepage.
+# Copyright (c) 2014-2018  G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
