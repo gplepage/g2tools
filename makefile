@@ -67,6 +67,9 @@ run run-examples:
 register-pypi:
 	python setup.py register # use only once, first time
 
+upload-twine:
+    twine upload dist/g2tools-$(VERSION).tar.gz
+
 upload-pypi:
 	python setup.py sdist upload
 
