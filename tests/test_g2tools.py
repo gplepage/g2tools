@@ -41,14 +41,41 @@ class test_g2tools(unittest.TestCase):
         " moments(G) "
         optprint('\n=========== Test moments')
         mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4])
-        assert mom[0] == 8. and mom[2] == 16. and mom[4] == 52.
+        assert mom[0] == 11. and mom[2] == 28. and mom[4] == 100.
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], tmax=1.)
+        assert mom[0] == 5. and mom[2] == 4. and mom[4] == 4.
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], tmin=1.1)
+        assert mom[0] == 6. and mom[2] == 24. and mom[4] == 96.
+        mom = moments([1., 2., 3., 3., 2.], nlist=[0, 2, 4])
+        assert mom[0] == 11. and mom[2] == 28. and mom[4] == 100.
         mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False)
-        assert mom[0] == 16. and mom[2] == 64. and mom[4] == 424.
+        assert mom[0] == 15. and mom[2] == 64. and mom[4] == 424.
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, tmax=1.)
+        assert mom[0] == 5. and mom[2] == 4. and mom[4] == 4.
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, tmin=1.1)
+        assert mom[0] == 10. and mom[2] == 60. and mom[4] == 420.
         tayl = [1., -2. , 3.]
         mom = taylor2mom(tayl)
         assert mom[4] == 24. and mom[6] == 1440. and mom[8] == 120960.
         assert numpy.allclose(mom2taylor(mom), tayl)
         optprint('nothing to report -- all is good')
+
+    def test_moments_tmin_tmax(self):
+        " moments vs fourier "
+        optprint('\n=========== moments vs fourier')
+        # fake data --- N=3 states
+        N = 3
+        ainv = 2.5
+        Z = 1.5
+        # the following are in lattice units, simulating lattice output
+        m = np.array([0.5, 1.0, 1.5])[:N, None]
+        t = np.arange(100)[None,:]
+        G = np.sum(m / 4 * np.exp(-t*m), axis=0) / Z**2
+        vpol = vacpol(moments(G, ainv=ainv, Z=Z, periodic=False))
+        fvpol = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False)
+        a_mu_m = a_mu(vpol, qmax=1000.)
+        a_mu_f = a_mu(fvpol, qmax=1000.)
+        self.assertLess(abs(1 - a_mu_m/a_mu_f), 1e-4)
 
     def test_pade_svd(self):
         " pade_svd(tayl, n, m) "
@@ -290,6 +317,27 @@ class test_g2tools(unittest.TestCase):
             optprint('a_mu from {} states: {}'.format(n, a_mu_exact))
         self.assertLess(abs(1 - a_mu_fourier/a_mu_exact), 1e-4)
 
+    def test_fourier_tmin_tmax(self):
+        "  fourier_vacpol with tmin,tmax "
+        optprint('\n=========== Test exact vs fourier')
+        # fake data --- N=3 states
+        N = 3
+        ainv = 2.5
+        Z = 1.5
+        # the following are in lattice units, simulating lattice output
+        m = np.array([0.5, 1.0, 1.5])[:N, None]
+        t = np.arange(100)[None,:]
+        G = np.sum(m / 4 * np.exp(-t*m), axis=0) / Z**2
+
+        # fourier analysis
+        fvpol = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False)
+        fvpolp = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False, tmin=10.)
+        fvpolm = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False, tmax=10.)
+        a_mu_all = a_mu(fvpol, qmax=1000.)
+        a_mu_p = a_mu(fvpolp, qmax=1000.)
+        a_mu_m = a_mu(fvpolm, qmax=1000.)
+        self.assertLess(abs(1 - a_mu_all/(a_mu_p + a_mu_m )), 1e-6)
+
     def test_exact_vs_fourier_periodic(self):
         " a_mu from pade vs from function"
         optprint('\n=========== Test exact vs fourier')
@@ -317,6 +365,30 @@ class test_g2tools(unittest.TestCase):
                     )
                 optprint('a_mu from {} states: {}'.format(n, a_mu_exact))
             self.assertLess(abs(1 - a_mu_fourier/a_mu_exact), 1e-4)
+
+    def test_fourier_periodic_tmin_tmax(self):
+        " a_mu from pade vs from function"
+        optprint('\n=========== Test exact vs fourier')
+        # loop over len(G) = even and odd
+        for start in [-2, -1]:
+            # fake data --- N=3 states
+            N = 3
+            ainv = 2.5
+            Z = 1.5
+            # the following are in lattice units, simulating lattice output
+            m = np.array([0.5, 1.0, 1.5])[:N, None]
+            t = np.arange(100)
+            t = np.concatenate((t, t[start:0:-1]))
+            G = np.sum(m / 4 * np.exp(-t*m), axis=0) / Z**2
+
+            # fourier analysis
+            fvpol = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True)
+            fvpolp = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True, tmin=10.)
+            fvpolm = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True, tmax=10.)
+            a_mu_all = a_mu(fvpol, qmax=1000.)
+            a_mu_p = a_mu(fvpolp, qmax=1000.)
+            a_mu_m = a_mu(fvpolm, qmax=1000.)
+            self.assertLess(abs(1 - a_mu_all/(a_mu_p + a_mu_m )), 1e-6)
 
     def test_exact_vs_vacpol_FT(self):
         " a_mu from fourier_vacpol(vacpol.FT) "

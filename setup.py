@@ -1,7 +1,7 @@
 from distutils.command.build_py import build_py as _build_py
 from distutils.core import setup
 
-G2TOOLS_VERSION = '1.3.3'
+G2TOOLS_VERSION = '1.3.4'
 
 class build_py(_build_py):
     def run(self):
@@ -19,8 +19,8 @@ setup(name='g2tools',
     packages={''},
     package_dir={'':'src'},
     cmdclass={'build_py': build_py},
-    requires=['numpy (>=1.7)', 'gvar (>=7.3)', 'scipy'],    # for docutils
-    install_requires=['gvar>=7.3', 'numpy>=1.7', 'scipy'],  # for pip
+    requires=['numpy (>=1.7)', 'gvar (>=7.3)', 'scipy', 'lsqfit'],    # for docutils
+    install_requires=['gvar>=7.3', 'numpy>=1.7', 'scipy', 'lsqfit'],  # for pip
     platforms="Any",
     url="https://github.com/gplepage/g2tools.git",
     long_description="""\

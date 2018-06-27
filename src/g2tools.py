@@ -67,8 +67,10 @@ The last two are available on pypi and also at https://github.com/gplepage.
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+from __future__ import division
 
 import gvar
+import lsqfit
 import numpy
 try:
     from scipy.special import factorial as scipy_factorial
@@ -96,7 +98,65 @@ QMAX = 1e5
 TOL = 1e-8
 HMIN = 1e-12
 
-def moments(G, Z=1., ainv=1., periodic=True, tmin=None, nlist=[4,6,8,10,12,14,16,18,20]):
+def moments(G, Z=1., ainv=1., periodic=True, tmin=None, tmax=None, nlist=[4,6,8,10,12,14]):
+    """ Compute t**n moments of correlator G.
+
+    Compute ``sum_t t**n G(t)`` for ``n`` in ``nlist``, where both positive and
+    negative ``t`` are included.
+
+    Args:
+        G: Array of correlator values ``G[t]`` for ``t=0,1...`` (in
+            lattice units).
+        Z: Renormalization factor for current (moments multiplied by ``Z**2``).
+            Defaul is 1.
+        ainv: Inverse lattice spacing used to convert moments to
+            physical units (n-th moment multiplied by ``1/ainv**(n-2)``).
+            Default is 1.
+        periodic: ``periodic=True`` implies ``G[-t] = G[t]`` (default);
+            ``periodic=False`` implies no periodicity in array ``G[t]``
+            (and results doubled to account for negative ``t``).
+        tmin: minimum ``t`` value (in same units as ``1/ainv``) included in
+            moments; ignored if ``None`` (default).
+        tmax: maximum ``t`` value (in same units as ``1/ainv``) included in
+            moments; ignored if ``None`` (default).
+        nlist: List of moments to calculate. Default is
+            ``nlist=[4,6,8...14]``.
+
+    Returns:
+        Dictionary ``Gmom`` where ``Gmom[n]`` is the ``n-th`` moment.
+    """
+    G = numpy.asarray(G)
+    if periodic:
+        # fold G
+        nt = len(G)
+        nf = nt // 2 + 1
+        fG = G[:nf] * 0.0
+        fG[0] = G[0]
+        if isinstance(G[0], gvar.GVar):
+            fG[1:] = lsqfit.wavg([G[1:nf], G[:-nf:-1]])
+        else:
+            fG[1:] = (G[1:nf] + G[:-nf:-1]) / 2.
+        G = fG
+    nt = len(G)
+    t = numpy.arange(nt, dtype=float) / ainv
+    if tmax is not None:
+        idx = t <= tmax
+        G = G[idx]
+        t = t[idx]
+    if tmin is not None:
+        idx = t >= tmin
+        G = G[idx]
+        t = t[idx]
+    Gmom = gvar.BufferDict()
+    fac = 2 * Z ** 2 * ainv ** 2
+    for n in nlist:
+        if n == 0 and (tmin is None or tmin <= 0):
+            Gmom[n] = fac * (G[0] / 2. + numpy.sum(G[1:]))
+        else:
+            Gmom[n] = fac * numpy.sum(t ** n * G)
+    return Gmom
+
+def oldmoments(G, Z=1., ainv=1., periodic=True, tmin=None, nlist=[4,6,8,10,12,14,16,18,20]):
     """ Compute t**n moments of correlator G.
 
     Compute ``sum_t t**n G(t)`` for ``n`` in ``nlist``, where both positive and
@@ -232,12 +292,16 @@ class fourier_vacpol(object):
             by ``Z**2``). Defaul is 1.
         ainv: Inverse lattice spacing used to convert Fourier transform to
             physical units. Default is 1.
+        tmin: If not ``None``, include only ``t >= tmin`` (same units
+            as ``1/ainv``).
+        tmax: If not ``None``, include only ``t < tmax`` (same units
+            as ``1/ainv``).
         periodic: ``periodic=True`` implies ``G[-t] = G[t]`` (default);
             ``periodic=False`` implies ``G[t]`` is not periodic and
             is specified for only non-negative ``t`` values
             (results are doubled to account for negative ``t``).
     """
-    def __init__(self, G, Z=1., ainv=1., periodic=True):
+    def __init__(self, G, Z=1., ainv=1., periodic=True, tmin=None, tmax=None):
         G = numpy.array(G)
         if periodic:
             nG = len(G)
@@ -257,6 +321,11 @@ class fourier_vacpol(object):
         self.G_ainv = self.G * Z**2 * ainv**2
         self.t = numpy.arange(len(self.G_ainv)) / ainv   # q is in phys units
         self.t2 = self.t ** 2
+        if tmin is not None:
+            self.G_ainv[self.t < tmin] *= 0
+        if tmax is not None:
+            self.G_ainv[self.t >= tmax] *= 0
+
 
     def __call__(self, q2):
         # N.B. factor of 1/ainv needed for t-integral inncluded in self.G
@@ -456,7 +525,7 @@ class vacpol(object):
         The Pade approximant can be decomposed into a sum of poles (partial
         fractions), which give a sum of decaying exponentials when Fourier
         transformed back to t-space. The amplitudes and energies of these
-        exponentials (for the transform of ``q2 * Pi-hat(q2)'') are stored in
+        exponentials (for the transform of ``q2 * Pi-hat(q2)``) are stored in
         :class:`g2tools.vacpol` attributes ``E`` and ``ampl``, respectively.
 
         The decomposition into a sum of poles leaves a residual polynomial in

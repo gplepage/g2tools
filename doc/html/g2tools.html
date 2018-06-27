@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>g2tools Module &#8212; g2tools 1.3.3 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.3.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -30,8 +22,7 @@
 <link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
 <![endif]-->
 
-  </head>
-  <body>
+  </head><body>
 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -55,7 +46,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-g2tools">
-<span id="g2tools-module"></span><h1><a class="reference internal" href="#module-g2tools" title="g2tools: Least-Squares Fit to Correlators."><code class="xref py py-mod docutils literal"><span class="pre">g2tools</span></code></a> Module<a class="headerlink" href="#module-g2tools" title="Permalink to this headline">¶</a></h1>
+<span id="g2tools-module"></span><h1><a class="reference internal" href="#module-g2tools" title="g2tools: Least-Squares Fit to Correlators."><code class="xref py py-mod docutils literal notranslate"><span class="pre">g2tools</span></code></a> Module<a class="headerlink" href="#module-g2tools" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="g-2-anomaly">
 <h2>g-2 Anomaly<a class="headerlink" href="#g-2-anomaly" title="Permalink to this headline">¶</a></h2>
 <p>The main tool for calculating the muon’s anomaly is:</p>
@@ -68,26 +59,26 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>vacpol</strong> – Function of <code class="docutils literal"><span class="pre">q2</span></code> for the subtracted vacuum polarization (Pi-hat).
-Here <code class="docutils literal"><span class="pre">q2</span></code> is space-like and so always positive.
-(See class <a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal"><span class="pre">vacpol</span></code></a>.)</li>
+<li><strong>vacpol</strong> – Function of <code class="docutils literal notranslate"><span class="pre">q2</span></code> for the subtracted vacuum polarization (Pi-hat).
+Here <code class="docutils literal notranslate"><span class="pre">q2</span></code> is space-like and so always positive.
+(See class <a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal notranslate"><span class="pre">vacpol</span></code></a>.)</li>
 <li><strong>Q</strong> – Effective charge (in units of the proton’s charge) — for
-example, <code class="docutils literal"><span class="pre">Q</span> <span class="pre">=</span> <span class="pre">1./3.</span> <span class="pre">``for</span> <span class="pre">s-quark</span> <span class="pre">loops</span> <span class="pre">(phi,</span> <span class="pre">etc)</span> <span class="pre">while</span>
+example, <code class="docutils literal notranslate"><span class="pre">Q</span> <span class="pre">=</span> <span class="pre">1./3.</span> <span class="pre">``for</span> <span class="pre">s-quark</span> <span class="pre">loops</span> <span class="pre">(phi,</span> <span class="pre">etc)</span> <span class="pre">while</span>
 <span class="pre">``Q</span> <span class="pre">=</span> <span class="pre">sqrt(5./9.)</span></code> for u/d loops (rho, etc). (Default is 1.)</li>
-<li><strong>mmu</strong> – Mass of the muon (default is <code class="docutils literal"><span class="pre">g2tools.Mmu</span></code>).</li>
-<li><strong>alpha</strong> – QED coupling (default is <code class="docutils literal"><span class="pre">g2tools.ALPHA</span></code>).</li>
-<li><strong>qmin</strong> – Maximum <code class="docutils literal"><span class="pre">q</span></code> included in integral (default is <code class="docutils literal"><span class="pre">g2tools.QMIN</span> <span class="pre">=</span> <span class="pre">1e-15</span></code>).</li>
-<li><strong>qmax</strong> – Maximum <code class="docutils literal"><span class="pre">q</span></code> included in integral (default is <code class="docutils literal"><span class="pre">g2tools.QMAX</span> <span class="pre">=</span> <span class="pre">1e5</span></code>).</li>
-<li><strong>rescale</strong> – Rescales momentum in vacuum pol.: <code class="docutils literal"><span class="pre">vacpol(q2</span> <span class="pre">*</span> <span class="pre">rescale**2)</span></code>
+<li><strong>mmu</strong> – Mass of the muon (default is <code class="docutils literal notranslate"><span class="pre">g2tools.Mmu</span></code>).</li>
+<li><strong>alpha</strong> – QED coupling (default is <code class="docutils literal notranslate"><span class="pre">g2tools.ALPHA</span></code>).</li>
+<li><strong>qmin</strong> – Maximum <code class="docutils literal notranslate"><span class="pre">q</span></code> included in integral (default is <code class="docutils literal notranslate"><span class="pre">g2tools.QMIN</span> <span class="pre">=</span> <span class="pre">1e-15</span></code>).</li>
+<li><strong>qmax</strong> – Maximum <code class="docutils literal notranslate"><span class="pre">q</span></code> included in integral (default is <code class="docutils literal notranslate"><span class="pre">g2tools.QMAX</span> <span class="pre">=</span> <span class="pre">1e5</span></code>).</li>
+<li><strong>rescale</strong> – Rescales momentum in vacuum pol.: <code class="docutils literal notranslate"><span class="pre">vacpol(q2</span> <span class="pre">*</span> <span class="pre">rescale**2)</span></code>
 (default is 1).</li>
-<li><strong>tol</strong> – Tolerance for integral over <code class="docutils literal"><span class="pre">q2</span></code> (default is <code class="docutils literal"><span class="pre">g2tools.TOL</span> <span class="pre">=</span> <span class="pre">1e-8</span></code>).</li>
-<li><strong>exceptions</strong> – If <code class="docutils literal"><span class="pre">True</span></code> (default), an exception is raised if there
-are bad poles in the <code class="docutils literal"><span class="pre">vacpol</span></code>. If <code class="docutils literal"><span class="pre">False</span></code>, exceptions are
+<li><strong>tol</strong> – Tolerance for integral over <code class="docutils literal notranslate"><span class="pre">q2</span></code> (default is <code class="docutils literal notranslate"><span class="pre">g2tools.TOL</span> <span class="pre">=</span> <span class="pre">1e-8</span></code>).</li>
+<li><strong>exceptions</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), an exception is raised if there
+are bad poles in the <code class="docutils literal notranslate"><span class="pre">vacpol</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, exceptions are
 suppressed.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of <code class="docutils literal"><span class="pre">a_mu</span></code> corresponding to <code class="docutils literal"><span class="pre">Q**2</span> <span class="pre">*</span> <span class="pre">vacpol</span></code>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of <code class="docutils literal notranslate"><span class="pre">a_mu</span></code> corresponding to <code class="docutils literal notranslate"><span class="pre">Q**2</span> <span class="pre">*</span> <span class="pre">vacpol</span></code>.</p>
 </td>
 </tr>
 </tbody>
@@ -100,33 +91,35 @@ suppressed.</li>
 <p>The main tools for creating and manipulating moments are:</p>
 <dl class="function">
 <dt id="g2tools.moments">
-<code class="descclassname">g2tools.</code><code class="descname">moments</code><span class="sig-paren">(</span><em>G, Z=1.0, ainv=1.0, periodic=True, tmin=None, nlist=[4, 6, 8, 10, 12, 14, 16, 18, 20]</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.moments" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">g2tools.</code><code class="descname">moments</code><span class="sig-paren">(</span><em>G, Z=1.0, ainv=1.0, periodic=True, tmin=None, tmax=None, nlist=[4, 6, 8, 10, 12, 14, 16, 18, 20]</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.moments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute t**n moments of correlator G.</p>
-<p>Compute <code class="docutils literal"><span class="pre">sum_t</span> <span class="pre">t**n</span> <span class="pre">G(t)</span></code> for <code class="docutils literal"><span class="pre">n</span></code> in <code class="docutils literal"><span class="pre">nlist</span></code>, where both positive and
-negative <code class="docutils literal"><span class="pre">t</span></code> are included.</p>
+<p>Compute <code class="docutils literal notranslate"><span class="pre">sum_t</span> <span class="pre">t**n</span> <span class="pre">G(t)</span></code> for <code class="docutils literal notranslate"><span class="pre">n</span></code> in <code class="docutils literal notranslate"><span class="pre">nlist</span></code>, where both positive and
+negative <code class="docutils literal notranslate"><span class="pre">t</span></code> are included.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>G</strong> – Array of correlator values <code class="docutils literal"><span class="pre">G[t]</span></code> for <code class="docutils literal"><span class="pre">t=0,1...</span></code> (in
+<li><strong>G</strong> – Array of correlator values <code class="docutils literal notranslate"><span class="pre">G[t]</span></code> for <code class="docutils literal notranslate"><span class="pre">t=0,1...</span></code> (in
 lattice units).</li>
-<li><strong>Z</strong> – Renormalization factor for current (moments multiplied by <code class="docutils literal"><span class="pre">Z**2</span></code>).
+<li><strong>Z</strong> – Renormalization factor for current (moments multiplied by <code class="docutils literal notranslate"><span class="pre">Z**2</span></code>).
 Defaul is 1.</li>
 <li><strong>ainv</strong> – Inverse lattice spacing used to convert moments to
-physical units (n-th moment multiplied by <code class="docutils literal"><span class="pre">1/ainv**(n-2)</span></code>).
+physical units (n-th moment multiplied by <code class="docutils literal notranslate"><span class="pre">1/ainv**(n-2)</span></code>).
 Default is 1.</li>
-<li><strong>periodic</strong> – <code class="docutils literal"><span class="pre">periodic=True</span></code> implies <code class="docutils literal"><span class="pre">G[-t]</span> <span class="pre">=</span> <span class="pre">G[t]</span></code> (default);
-<code class="docutils literal"><span class="pre">periodic=False</span></code> implies no periodicity in array <code class="docutils literal"><span class="pre">G[t]</span></code>
-(and results doubled to account for negative <code class="docutils literal"><span class="pre">t</span></code>).</li>
-<li><strong>tmin</strong> – minimum <code class="docutils literal"><span class="pre">t</span></code> value included in moments; ignored
-if <code class="docutils literal"><span class="pre">None</span></code> (default).</li>
+<li><strong>periodic</strong> – <code class="docutils literal notranslate"><span class="pre">periodic=True</span></code> implies <code class="docutils literal notranslate"><span class="pre">G[-t]</span> <span class="pre">=</span> <span class="pre">G[t]</span></code> (default);
+<code class="docutils literal notranslate"><span class="pre">periodic=False</span></code> implies no periodicity in array <code class="docutils literal notranslate"><span class="pre">G[t]</span></code>
+(and results doubled to account for negative <code class="docutils literal notranslate"><span class="pre">t</span></code>).</li>
+<li><strong>tmin</strong> – minimum <code class="docutils literal notranslate"><span class="pre">t</span></code> value (in same units as <code class="docutils literal notranslate"><span class="pre">1/ainv</span></code>) included in
+moments; ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default).</li>
+<li><strong>tmax</strong> – maximum <code class="docutils literal notranslate"><span class="pre">t</span></code> value (in same units as <code class="docutils literal notranslate"><span class="pre">1/ainv</span></code>) included in
+moments; ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default).</li>
 <li><strong>nlist</strong> – List of moments to calculate. Default is
-<code class="docutils literal"><span class="pre">nlist=[4,6,8...20]</span></code>.</li>
+<code class="docutils literal notranslate"><span class="pre">nlist=[4,6,8...20]</span></code>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Dictionary <code class="docutils literal"><span class="pre">Gmom</span></code> where <code class="docutils literal"><span class="pre">Gmom[n]</span></code> is the <code class="docutils literal"><span class="pre">n-th</span></code> moment.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Dictionary <code class="docutils literal notranslate"><span class="pre">Gmom</span></code> where <code class="docutils literal notranslate"><span class="pre">Gmom[n]</span></code> is the <code class="docutils literal notranslate"><span class="pre">n-th</span></code> moment.</p>
 </td>
 </tr>
 </tbody>
@@ -136,54 +129,54 @@ if <code class="docutils literal"><span class="pre">None</span></code> (default)
 <dl class="function">
 <dt id="g2tools.mom2taylor">
 <code class="descclassname">g2tools.</code><code class="descname">mom2taylor</code><span class="sig-paren">(</span><em>mom</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.mom2taylor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert moments in dictionary <code class="docutils literal"><span class="pre">mom</span></code> into Taylor series coefficients.</p>
+<dd><p>Convert moments in dictionary <code class="docutils literal notranslate"><span class="pre">mom</span></code> into Taylor series coefficients.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="g2tools.taylor2mom">
 <code class="descclassname">g2tools.</code><code class="descname">taylor2mom</code><span class="sig-paren">(</span><em>tayl</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.taylor2mom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert Taylor coefficients in array <code class="docutils literal"><span class="pre">tayl</span></code> to moments.</p>
+<dd><p>Convert Taylor coefficients in array <code class="docutils literal notranslate"><span class="pre">tayl</span></code> to moments.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="subtracted-vacuum-polarization">
 <h2>Subtracted Vacuum Polarization<a class="headerlink" href="#subtracted-vacuum-polarization" title="Permalink to this headline">¶</a></h2>
-<p>A subtracted vacuum polarization function (<code class="docutils literal"><span class="pre">Pi-hat</span></code>) is
+<p>A subtracted vacuum polarization function (<code class="docutils literal notranslate"><span class="pre">Pi-hat</span></code>) is
 represented by the following classes:</p>
 <dl class="class">
 <dt id="g2tools.vacpol">
 <em class="property">class </em><code class="descclassname">g2tools.</code><code class="descname">vacpol</code><span class="sig-paren">(</span><em>g</em>, <em>order=None</em>, <em>scale=None</em>, <em>rtol=None</em>, <em>qth=0</em>, <em>warn=True</em>, <em>exceptions=True</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.vacpol" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subtracted vac. pol’n (<code class="docutils literal"><span class="pre">Pi-hat(q2)</span></code>) from correlator moments <code class="docutils literal"><span class="pre">g[n]</span></code>.</p>
-<p>The current-current correlator is <code class="docutils literal"><span class="pre">q2</span> <span class="pre">*</span> <span class="pre">Pi(q2)</span></code>, where
-<code class="docutils literal"><span class="pre">Pi-hat(q2)</span> <span class="pre">=</span> <span class="pre">Pi(q2)</span> <span class="pre">-</span> <span class="pre">Pi(0)</span></code> is the subtracted (i.e., renormalized)
+<dd><p>Subtracted vac. pol’n (<code class="docutils literal notranslate"><span class="pre">Pi-hat(q2)</span></code>) from correlator moments <code class="docutils literal notranslate"><span class="pre">g[n]</span></code>.</p>
+<p>The current-current correlator is <code class="docutils literal notranslate"><span class="pre">q2</span> <span class="pre">*</span> <span class="pre">Pi(q2)</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">Pi-hat(q2)</span> <span class="pre">=</span> <span class="pre">Pi(q2)</span> <span class="pre">-</span> <span class="pre">Pi(0)</span></code> is the subtracted (i.e., renormalized)
 vacuum polariztion function.</p>
 <p>The vacuum polarization function is a Pade approximant to the Taylor
-series corresponding to the moments <code class="docutils literal"><span class="pre">g[n]</span></code>.  The code estimates the
+series corresponding to the moments <code class="docutils literal notranslate"><span class="pre">g[n]</span></code>.  The code estimates the
 precision of the moments and sets the tolerance for the Pade determination
-accordingly. The order <code class="docutils literal"><span class="pre">(m,n)</span></code> of the Pade can be specified, but might
+accordingly. The order <code class="docutils literal notranslate"><span class="pre">(m,n)</span></code> of the Pade can be specified, but might
 be reduced by the code if the data are noisy.</p>
-<p><a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal"><span class="pre">vacpol</span></code></a> objects are used primarily as functions (of <em>q</em><sup>2</sup>)
-but also have several attributes. Attribute <code class="docutils literal"><span class="pre">pseries</span></code> is a dictionary
-containing various powerseries (see <code class="docutils literal"><span class="pre">gvar.powerseries</span></code>) describing the
-function: the vacuum polarization function is <code class="docutils literal"><span class="pre">q2</span></code> times a Pade
-approximant  with a numerator given by <code class="docutils literal"><span class="pre">pseries['num']</span></code> and a
-denominator  given by <code class="docutils literal"><span class="pre">pseries['den']</span></code>. The Taylor series for this
-function  is given by <code class="docutils literal"><span class="pre">q2</span></code> times <code class="docutils literal"><span class="pre">pseries['taylor']</span></code>.</p>
-<p><a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal"><span class="pre">vacpol</span></code></a> objects also have a method <a class="reference internal" href="#g2tools.vacpol.badpoles" title="g2tools.vacpol.badpoles"><code class="xref py py-func docutils literal"><span class="pre">vacpol.badpoles()</span></code></a> that
-tests the poles in the denomator of the Pade. <code class="docutils literal"><span class="pre">badpoles(qth)</span></code> returns
-<code class="docutils literal"><span class="pre">False</span></code> if any of the poles is complex or if any are located above
-<code class="docutils literal"><span class="pre">-(qth</span> <span class="pre">**</span> <span class="pre">2)</span></code>. <code class="docutils literal"><span class="pre">qth</span></code> should be set equal to the threshold energy for
-the correlator. If it is unset, <code class="docutils literal"><span class="pre">qth=0</span></code> is used. Lists of the
-poles and their residues (for <code class="docutils literal"><span class="pre">Pi-hat(q2)</span></code>) are available in
-attributes <code class="docutils literal"><span class="pre">pole</span></code> and <code class="docutils literal"><span class="pre">residue</span></code>, respectively.</p>
-<p><a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal"><span class="pre">vacpol</span></code></a> has several static methods for creating specialized
+<p><a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal notranslate"><span class="pre">vacpol</span></code></a> objects are used primarily as functions (of <em>q</em><sup>2</sup>)
+but also have several attributes. Attribute <code class="docutils literal notranslate"><span class="pre">pseries</span></code> is a dictionary
+containing various powerseries (see <code class="docutils literal notranslate"><span class="pre">gvar.powerseries</span></code>) describing the
+function: the vacuum polarization function is <code class="docutils literal notranslate"><span class="pre">q2</span></code> times a Pade
+approximant  with a numerator given by <code class="docutils literal notranslate"><span class="pre">pseries['num']</span></code> and a
+denominator  given by <code class="docutils literal notranslate"><span class="pre">pseries['den']</span></code>. The Taylor series for this
+function  is given by <code class="docutils literal notranslate"><span class="pre">q2</span></code> times <code class="docutils literal notranslate"><span class="pre">pseries['taylor']</span></code>.</p>
+<p><a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal notranslate"><span class="pre">vacpol</span></code></a> objects also have a method <a class="reference internal" href="#g2tools.vacpol.badpoles" title="g2tools.vacpol.badpoles"><code class="xref py py-func docutils literal notranslate"><span class="pre">vacpol.badpoles()</span></code></a> that
+tests the poles in the denomator of the Pade. <code class="docutils literal notranslate"><span class="pre">badpoles(qth)</span></code> returns
+<code class="docutils literal notranslate"><span class="pre">False</span></code> if any of the poles is complex or if any are located above
+<code class="docutils literal notranslate"><span class="pre">-(qth</span> <span class="pre">**</span> <span class="pre">2)</span></code>. <code class="docutils literal notranslate"><span class="pre">qth</span></code> should be set equal to the threshold energy for
+the correlator. If it is unset, <code class="docutils literal notranslate"><span class="pre">qth=0</span></code> is used. Lists of the
+poles and their residues (for <code class="docutils literal notranslate"><span class="pre">Pi-hat(q2)</span></code>) are available in
+attributes <code class="docutils literal notranslate"><span class="pre">pole</span></code> and <code class="docutils literal notranslate"><span class="pre">residue</span></code>, respectively.</p>
+<p><a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal notranslate"><span class="pre">vacpol</span></code></a> has several static methods for creating specialized
 examples of vacuum polarizations (e.g., for testing):</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">vacpol.fermion(m)</span></code> – 1-loop fermion (mass <code class="docutils literal"><span class="pre">m</span></code>) contribution;</li>
-<li><code class="docutils literal"><span class="pre">vacpol.scalar(m)</span></code> – 1-loop scalar (mass <code class="docutils literal"><span class="pre">m</span></code>) contribution;</li>
+<li><code class="docutils literal notranslate"><span class="pre">vacpol.fermion(m)</span></code> – 1-loop fermion (mass <code class="docutils literal notranslate"><span class="pre">m</span></code>) contribution;</li>
+<li><code class="docutils literal notranslate"><span class="pre">vacpol.scalar(m)</span></code> – 1-loop scalar (mass <code class="docutils literal notranslate"><span class="pre">m</span></code>) contribution;</li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">vacpol.vector(m,</span> <span class="pre">f)</span></code> – tree-level contribution from vector</dt>
-<dd>with mass <code class="docutils literal"><span class="pre">m</span></code> and decay constant <code class="docutils literal"><span class="pre">f</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vacpol.vector(m,</span> <span class="pre">f)</span></code> – tree-level contribution from vector</dt>
+<dd>with mass <code class="docutils literal notranslate"><span class="pre">m</span></code> and decay constant <code class="docutils literal notranslate"><span class="pre">f</span></code>.</dd>
 </dl>
 </li>
 </ul>
@@ -192,30 +185,30 @@ examples of vacuum polarizations (e.g., for testing):</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> – Dictionary containing moments where <code class="docutils literal"><span class="pre">g[n]</span> <span class="pre">=</span> <span class="pre">sum_t</span> <span class="pre">t**n</span> <span class="pre">G(t)</span></code>,
+<li><strong>g</strong> – Dictionary containing moments where <code class="docutils literal notranslate"><span class="pre">g[n]</span> <span class="pre">=</span> <span class="pre">sum_t</span> <span class="pre">t**n</span> <span class="pre">G(t)</span></code>,
 or array containing Taylor coefficients where
-<code class="docutils literal"><span class="pre">Pi-hat(q2)</span> <span class="pre">=</span> <span class="pre">q2</span> <span class="pre">*</span> <span class="pre">sum_j</span> <span class="pre">q2**j</span> <span class="pre">*</span> <span class="pre">g[j]</span></code>.</li>
-<li><strong>order</strong> – Tuple <code class="docutils literal"><span class="pre">(m,n)</span></code> specifying the order of the Pade
-approximant used to approximate <code class="docutils literal"><span class="pre">Pi-hat(q2)</span></code> (the function is
-approximated by <code class="docutils literal"><span class="pre">q2</span></code> times an <code class="docutils literal"><span class="pre">(m-1,n)</span></code> approximant). The
+<code class="docutils literal notranslate"><span class="pre">Pi-hat(q2)</span> <span class="pre">=</span> <span class="pre">q2</span> <span class="pre">*</span> <span class="pre">sum_j</span> <span class="pre">q2**j</span> <span class="pre">*</span> <span class="pre">g[j]</span></code>.</li>
+<li><strong>order</strong> – Tuple <code class="docutils literal notranslate"><span class="pre">(m,n)</span></code> specifying the order of the Pade
+approximant used to approximate <code class="docutils literal notranslate"><span class="pre">Pi-hat(q2)</span></code> (the function is
+approximated by <code class="docutils literal notranslate"><span class="pre">q2</span></code> times an <code class="docutils literal notranslate"><span class="pre">(m-1,n)</span></code> approximant). The
 order may be reduced (automatically) if the data are too noisy. If
 the order is not specified, it is set automatically according to
-the number of entries in <code class="docutils literal"><span class="pre">G</span></code>.</li>
-<li><strong>scale</strong> – Scale factor used to rescale <code class="docutils literal"><span class="pre">q2</span></code> so that
+the number of entries in <code class="docutils literal notranslate"><span class="pre">G</span></code>.</li>
+<li><strong>scale</strong> – Scale factor used to rescale <code class="docutils literal notranslate"><span class="pre">q2</span></code> so that
 the Taylor coefficients are more uniform in size. This is
 normally set automatically (from the first two moments),
-but the automatic value is overridden if <code class="docutils literal"><span class="pre">scale</span></code> is set.</li>
+but the automatic value is overridden if <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set.</li>
 <li><strong>rtol</strong> – Relative tolerance assumed when determining the
 Pade approximant. This is normally set automatically
 (from the standard deviations of the moments), but the
-automatic value is overridden if <code class="docutils literal"><span class="pre">rtol</span></code> is specified.</li>
-<li><strong>qth</strong> – Threshold for particle production: poles above <code class="docutils literal"><span class="pre">-qth**2</span></code>
-are bad. Default is <code class="docutils literal"><span class="pre">qth=0</span></code>.</li>
-<li><strong>warnings</strong> – <code class="docutils literal"><span class="pre">warnings=True</span></code> (default) causes a warning to be issued
-when the order has been reduced automatically. <code class="docutils literal"><span class="pre">warnings=False</span></code>
+automatic value is overridden if <code class="docutils literal notranslate"><span class="pre">rtol</span></code> is specified.</li>
+<li><strong>qth</strong> – Threshold for particle production: poles above <code class="docutils literal notranslate"><span class="pre">-qth**2</span></code>
+are bad. Default is <code class="docutils literal notranslate"><span class="pre">qth=0</span></code>.</li>
+<li><strong>warnings</strong> – <code class="docutils literal notranslate"><span class="pre">warnings=True</span></code> (default) causes a warning to be issued
+when the order has been reduced automatically. <code class="docutils literal notranslate"><span class="pre">warnings=False</span></code>
 suppresses the warnings.</li>
-<li><strong>exceptions</strong> – If <code class="docutils literal"><span class="pre">True</span></code> (default), an exception is raised if there
-are bad poles in the <code class="docutils literal"><span class="pre">vacpol</span></code>. If <code class="docutils literal"><span class="pre">False</span></code>, exceptions are
+<li><strong>exceptions</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), an exception is raised if there
+are bad poles in the <code class="docutils literal notranslate"><span class="pre">vacpol</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, exceptions are
 suppressed.</li>
 </ul>
 </td>
@@ -226,13 +219,13 @@ suppressed.</li>
 <dl class="method">
 <dt id="g2tools.vacpol.taylor">
 <code class="descname">taylor</code><span class="sig-paren">(</span><em>n=None</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.vacpol.taylor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return Taylor coefficients for <code class="docutils literal"><span class="pre">PI-hat(q2)/q2</span></code>.</p>
+<dd><p>Return Taylor coefficients for <code class="docutils literal notranslate"><span class="pre">PI-hat(q2)/q2</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> – Maximum number of coefficients returned. Returns
-all coefficents if <code class="docutils literal"><span class="pre">None</span></code> (default)/</td>
+all coefficents if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default)/</td>
 </tr>
 </tbody>
 </table>
@@ -246,8 +239,8 @@ all coefficents if <code class="docutils literal"><span class="pre">None</span><
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>qth</strong> – Threshold for particle production: poles above <code class="docutils literal"><span class="pre">-qth**2</span></code>
-are bad. (Default is <code class="docutils literal"><span class="pre">qth=0</span></code>.)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>qth</strong> – Threshold for particle production: poles above <code class="docutils literal notranslate"><span class="pre">-qth**2</span></code>
+are bad. (Default is <code class="docutils literal notranslate"><span class="pre">qth=0</span></code>.)</td>
 </tr>
 </tbody>
 </table>
@@ -256,31 +249,31 @@ are bad. (Default is <code class="docutils literal"><span class="pre">qth=0</spa
 <dl class="method">
 <dt id="g2tools.vacpol.FT">
 <code class="descname">FT</code><span class="sig-paren">(</span><em>t</em>, <em>ainv=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.vacpol.FT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fourier transform of <code class="docutils literal"><span class="pre">q2</span> <span class="pre">*</span> <span class="pre">PI-hat(q2)</span></code>.</p>
+<dd><p>Fourier transform of <code class="docutils literal notranslate"><span class="pre">q2</span> <span class="pre">*</span> <span class="pre">PI-hat(q2)</span></code>.</p>
 <p>The Pade approximant can be decomposed into a sum of poles (partial
 fractions), which give a sum of decaying exponentials when Fourier
 transformed back to t-space. The amplitudes and energies of these
-exponentials (for the transform of <code class="docutils literal"><span class="pre">q2</span> <span class="pre">*</span> <span class="pre">Pi-hat(q2)'')</span> <span class="pre">are</span> <span class="pre">stored</span> <span class="pre">in</span>
-<span class="pre">:class:`g2tools.vacpol`</span> <span class="pre">attributes</span> <span class="pre">``E</span></code> and <code class="docutils literal"><span class="pre">ampl</span></code>, respectively.</p>
+exponentials (for the transform of <code class="docutils literal notranslate"><span class="pre">q2</span> <span class="pre">*</span> <span class="pre">Pi-hat(q2)</span></code>) are stored in
+<a class="reference internal" href="#g2tools.vacpol" title="g2tools.vacpol"><code class="xref py py-class docutils literal notranslate"><span class="pre">g2tools.vacpol</span></code></a> attributes <code class="docutils literal notranslate"><span class="pre">E</span></code> and <code class="docutils literal notranslate"><span class="pre">ampl</span></code>, respectively.</p>
 <p>The decomposition into a sum of poles leaves a residual polynomial in
-<code class="docutils literal"><span class="pre">q2</span></code> (zeroth-order for <code class="docutils literal"><span class="pre">(n,n)</span></code> Pades). This is ignored in the
+<code class="docutils literal notranslate"><span class="pre">q2</span></code> (zeroth-order for <code class="docutils literal notranslate"><span class="pre">(n,n)</span></code> Pades). This is ignored in the
 Fourier transform since it typically affects the transform only for
-very small <code class="docutils literal"><span class="pre">t</span></code>. These terms have a negligible effect (suppressed by
-<code class="docutils literal"><span class="pre">a**2j</span></code> on the Taylor coefficients <code class="docutils literal"><span class="pre">Pi[j]</span></code> of <code class="docutils literal"><span class="pre">Pi-hat(q2)</span></code>
+very small <code class="docutils literal notranslate"><span class="pre">t</span></code>. These terms have a negligible effect (suppressed by
+<code class="docutils literal notranslate"><span class="pre">a**2j</span></code> on the Taylor coefficients <code class="docutils literal notranslate"><span class="pre">Pi[j]</span></code> of <code class="docutils literal notranslate"><span class="pre">Pi-hat(q2)</span></code>
 (for j&gt;=1).</p>
-<p>Optional parameter <code class="docutils literal"><span class="pre">ainv</span></code> can be used to convert the Fourier
-transform to lattice units (by multiplying it by <code class="docutils literal"><span class="pre">1/ainv**3</span></code>) for
-comparison with simulation data. The times <code class="docutils literal"><span class="pre">t</span></code> are then
+<p>Optional parameter <code class="docutils literal notranslate"><span class="pre">ainv</span></code> can be used to convert the Fourier
+transform to lattice units (by multiplying it by <code class="docutils literal notranslate"><span class="pre">1/ainv**3</span></code>) for
+comparison with simulation data. The times <code class="docutils literal notranslate"><span class="pre">t</span></code> are then
 assumed to be in lattice units.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>t</strong> (<em>number</em><em>, </em><em>array</em>) – Time in physical units unless <code class="docutils literal"><span class="pre">ainv</span></code>
+<li><strong>t</strong> (<em>number</em><em>, </em><em>array</em>) – Time in physical units unless <code class="docutils literal notranslate"><span class="pre">ainv</span></code>
 is specified, in which case lattice units are assumed.</li>
 <li><strong>ainv</strong> – Inverse lattice spacing. The Fourier transform is in lattice
-units if <code class="docutils literal"><span class="pre">ainv</span></code> is specified (assuming the original
+units if <code class="docutils literal notranslate"><span class="pre">ainv</span></code> is specified (assuming the original
 Taylor coefficients are in physical units).</li>
 </ul>
 </td>
@@ -304,20 +297,20 @@ Taylor coefficients are in physical units).</li>
 <dl class="staticmethod">
 <dt id="g2tools.vacpol.vector">
 <em class="property">static </em><code class="descname">vector</code><span class="sig-paren">(</span><em>m</em>, <em>f=1.0</em>, <em>n=10</em>, <em>use_pade=False</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.vacpol.vector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Vac. pol. due to a vector with mass <code class="docutils literal"><span class="pre">m</span></code> and decay const. <code class="docutils literal"><span class="pre">f</span></code>.</p>
+<dd><p>Vac. pol. due to a vector with mass <code class="docutils literal notranslate"><span class="pre">m</span></code> and decay const. <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p>
 <p>The decay constant is defined such that the vacuum polarization
-function is <code class="docutils literal"><span class="pre">Pi-hat</span> <span class="pre">=</span> <span class="pre">q2</span> <span class="pre">*</span> <span class="pre">f**2/2/m**2</span> <span class="pre">/</span> <span class="pre">(q2</span> <span class="pre">+</span> <span class="pre">m**2)</span></code>. This
-corresponds in <code class="docutils literal"><span class="pre">t</span></code> space to <code class="docutils literal"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">f**2</span> <span class="pre">*</span> <span class="pre">exp(-m</span> <span class="pre">*</span> <span class="pre">t)</span> <span class="pre">/</span> <span class="pre">4</span></code>.</p>
+function is <code class="docutils literal notranslate"><span class="pre">Pi-hat</span> <span class="pre">=</span> <span class="pre">q2</span> <span class="pre">*</span> <span class="pre">f**2/2/m**2</span> <span class="pre">/</span> <span class="pre">(q2</span> <span class="pre">+</span> <span class="pre">m**2)</span></code>. This
+corresponds in <code class="docutils literal notranslate"><span class="pre">t</span></code> space to <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">f**2</span> <span class="pre">*</span> <span class="pre">exp(-m</span> <span class="pre">*</span> <span class="pre">t)</span> <span class="pre">/</span> <span class="pre">4</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="g2tools.fourier_vacpol">
-<em class="property">class </em><code class="descclassname">g2tools.</code><code class="descname">fourier_vacpol</code><span class="sig-paren">(</span><em>G</em>, <em>Z=1.0</em>, <em>ainv=1.0</em>, <em>periodic=True</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.fourier_vacpol" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subtracted vac. pol’n (<code class="docutils literal"><span class="pre">Pi-hat(q2)</span></code>) from correlator <code class="docutils literal"><span class="pre">G(t)</span></code>.</p>
-<p>The correlator is Fourier transformed to produce a function <code class="docutils literal"><span class="pre">Pi_hat</span></code>
-of (Euclidean) <em>q</em><sup>2</sup> suitable for use in <a class="reference internal" href="#g2tools.a_mu" title="g2tools.a_mu"><code class="xref py py-func docutils literal"><span class="pre">g2tools.a_mu()</span></code></a>.</p>
+<em class="property">class </em><code class="descclassname">g2tools.</code><code class="descname">fourier_vacpol</code><span class="sig-paren">(</span><em>G</em>, <em>Z=1.0</em>, <em>ainv=1.0</em>, <em>periodic=True</em>, <em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.fourier_vacpol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtracted vac. pol’n (<code class="docutils literal notranslate"><span class="pre">Pi-hat(q2)</span></code>) from correlator <code class="docutils literal notranslate"><span class="pre">G(t)</span></code>.</p>
+<p>The correlator is Fourier transformed to produce a function <code class="docutils literal notranslate"><span class="pre">Pi_hat</span></code>
+of (Euclidean) <em>q</em><sup>2</sup> suitable for use in <a class="reference internal" href="#g2tools.a_mu" title="g2tools.a_mu"><code class="xref py py-func docutils literal notranslate"><span class="pre">g2tools.a_mu()</span></code></a>.</p>
 <p>See Bernecker &amp; Meyer, EPJA47 (2011) 148 , arXiv:1107.4388 for details
 on the Fouier transformation.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -326,17 +319,21 @@ on the Fouier transformation.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>G</strong> (<em>array</em>) – Current-current correlator in an array whose elements
-are <code class="docutils literal"><span class="pre">[G(0),G(a),G(2*a),...,G(-2*a),G(-a)]</span></code> if
-<code class="docutils literal"><span class="pre">periodic=True</span></code> or <code class="docutils literal"><span class="pre">[G(0),G(a),...,G(T*a-1)]</span></code>
-otherwise. <code class="docutils literal"><span class="pre">G</span></code> is assumed to be in lattice units.</li>
+are <code class="docutils literal notranslate"><span class="pre">[G(0),G(a),G(2*a),...,G(-2*a),G(-a)]</span></code> if
+<code class="docutils literal notranslate"><span class="pre">periodic=True</span></code> or <code class="docutils literal notranslate"><span class="pre">[G(0),G(a),...,G(T*a-1)]</span></code>
+otherwise. <code class="docutils literal notranslate"><span class="pre">G</span></code> is assumed to be in lattice units.</li>
 <li><strong>Z</strong> – Renormalization factor for current (correlator multiplied
-by <code class="docutils literal"><span class="pre">Z**2</span></code>). Defaul is 1.</li>
+by <code class="docutils literal notranslate"><span class="pre">Z**2</span></code>). Defaul is 1.</li>
 <li><strong>ainv</strong> – Inverse lattice spacing used to convert Fourier transform to
 physical units. Default is 1.</li>
-<li><strong>periodic</strong> – <code class="docutils literal"><span class="pre">periodic=True</span></code> implies <code class="docutils literal"><span class="pre">G[-t]</span> <span class="pre">=</span> <span class="pre">G[t]</span></code> (default);
-<code class="docutils literal"><span class="pre">periodic=False</span></code> implies <code class="docutils literal"><span class="pre">G[t]</span></code> is not periodic and
-is specified for only non-negative <code class="docutils literal"><span class="pre">t</span></code> values
-(results are doubled to account for negative <code class="docutils literal"><span class="pre">t</span></code>).</li>
+<li><strong>tmin</strong> – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, include only <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">&gt;=</span> <span class="pre">tmin</span></code> (same units
+as <code class="docutils literal notranslate"><span class="pre">1/ainv</span></code>).</li>
+<li><strong>tmax</strong> – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, include only <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">&lt;</span> <span class="pre">tmax</span></code> (same units
+as <code class="docutils literal notranslate"><span class="pre">1/ainv</span></code>).</li>
+<li><strong>periodic</strong> – <code class="docutils literal notranslate"><span class="pre">periodic=True</span></code> implies <code class="docutils literal notranslate"><span class="pre">G[-t]</span> <span class="pre">=</span> <span class="pre">G[t]</span></code> (default);
+<code class="docutils literal notranslate"><span class="pre">periodic=False</span></code> implies <code class="docutils literal notranslate"><span class="pre">G[t]</span></code> is not periodic and
+is specified for only non-negative <code class="docutils literal notranslate"><span class="pre">t</span></code> values
+(results are doubled to account for negative <code class="docutils literal notranslate"><span class="pre">t</span></code>).</li>
 </ul>
 </td>
 </tr>
@@ -349,43 +346,43 @@ is specified for only non-negative <code class="docutils literal"><span class="p
 <h2>Padé Approximants<a class="headerlink" href="#pade-approximants" title="Permalink to this headline">¶</a></h2>
 <p>The following two functions are used for calculating Padé approximants from
 the Taylor coefficients of an arbitrary function. The first
-(<a class="reference internal" href="#g2tools.pade_svd" title="g2tools.pade_svd"><code class="xref py py-func docutils literal"><span class="pre">g2tools.pade_svd()</span></code></a>) implements an algorithm that uses <em>svd</em> cuts to
+(<a class="reference internal" href="#g2tools.pade_svd" title="g2tools.pade_svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">g2tools.pade_svd()</span></code></a>) implements an algorithm that uses <em>svd</em> cuts to
 address instabilities caused  by uncertainties in the Taylor coefficients. The
-second function (<a class="reference internal" href="#g2tools.pade_gvar" title="g2tools.pade_gvar"><code class="xref py py-func docutils literal"><span class="pre">g2tools.pade_gvar()</span></code></a>) is built on the first but allows
-Taylor coefficients to have uncertainties (<code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code>s). The statistical
+second function (<a class="reference internal" href="#g2tools.pade_gvar" title="g2tools.pade_gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">g2tools.pade_gvar()</span></code></a>) is built on the first but allows
+Taylor coefficients to have uncertainties (<code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s). The statistical
 uncertainties and correlations between different coefficients are propagated
 through the analysis.</p>
 <dl class="function">
 <dt id="g2tools.pade_svd">
 <code class="descclassname">g2tools.</code><code class="descname">pade_svd</code><span class="sig-paren">(</span><em>f</em>, <em>m</em>, <em>n</em>, <em>rtol=1e-14</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.pade_svd" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">[m,n]</span></code> Pade approximant to <code class="docutils literal"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">x**i</span></code>.</p>
-<p>The <code class="docutils literal"><span class="pre">[m,n]</span></code> Pade approximant to a series given by
-<code class="docutils literal"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">*</span> <span class="pre">x**i</span></code> is the ratio of  polynomials of order <code class="docutils literal"><span class="pre">m</span></code>
-(numerator) and <code class="docutils literal"><span class="pre">n</span></code> (denominator) whose  Taylor expansion agrees
-with that of the original series up to order <code class="docutils literal"><span class="pre">m+n</span></code>.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">[m,n]</span></code> Pade approximant to <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">x**i</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">[m,n]</span></code> Pade approximant to a series given by
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">*</span> <span class="pre">x**i</span></code> is the ratio of  polynomials of order <code class="docutils literal notranslate"><span class="pre">m</span></code>
+(numerator) and <code class="docutils literal notranslate"><span class="pre">n</span></code> (denominator) whose  Taylor expansion agrees
+with that of the original series up to order <code class="docutils literal notranslate"><span class="pre">m+n</span></code>.</p>
 <p>This code is adapted from P. Gonnet,  S. Guttel, L. N. Trefethen, SIAM
 Review Vol 55, No. 1, 101 (2013). It uses an <em>svd</em> algorithm to deal with
 imprecision in the input data,  here specified by the relative tolerance
-<code class="docutils literal"><span class="pre">rtol</span></code> for the  input coefficients <code class="docutils literal"><span class="pre">f[i]</span></code>. It automatically reduces
+<code class="docutils literal notranslate"><span class="pre">rtol</span></code> for the  input coefficients <code class="docutils literal notranslate"><span class="pre">f[i]</span></code>. It automatically reduces
 the order of the approximant if the extraction of Pade coefficients
-is too unstable given tolerance <code class="docutils literal"><span class="pre">rtol</span></code>.</p>
+is too unstable given tolerance <code class="docutils literal notranslate"><span class="pre">rtol</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>f</strong> – Array <code class="docutils literal"><span class="pre">f[i]</span></code> of power series coefficients for <code class="docutils literal"><span class="pre">i=0...n+m</span></code>.</li>
+<li><strong>f</strong> – Array <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> of power series coefficients for <code class="docutils literal notranslate"><span class="pre">i=0...n+m</span></code>.</li>
 <li><strong>m</strong> – Maximum order of polynomial in numerator of Pade
-approximant (<code class="docutils literal"><span class="pre">m&gt;=0</span></code>).</li>
+approximant (<code class="docutils literal notranslate"><span class="pre">m&gt;=0</span></code>).</li>
 <li><strong>n</strong> – Maximum order of polynomial in denominator of Pade
-approximant (<code class="docutils literal"><span class="pre">m&gt;=0</span></code>).</li>
+approximant (<code class="docutils literal notranslate"><span class="pre">m&gt;=0</span></code>).</li>
 <li><strong>rtol</strong> – Relative accuracy of input coefficients. (Default is 1e-14.)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple of power series coefficients <code class="docutils literal"><span class="pre">(p,</span> <span class="pre">q)</span></code> such that
-<code class="docutils literal"><span class="pre">sum_i</span> <span class="pre">p[i]</span> <span class="pre">x**i</span></code> is the numerator of the approximant,
-and <code class="docutils literal"><span class="pre">sum_i</span> <span class="pre">q[i]</span> <span class="pre">x**i</span></code> is the denominator. <code class="docutils literal"><span class="pre">q[0]</span></code> is
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple of power series coefficients <code class="docutils literal notranslate"><span class="pre">(p,</span> <span class="pre">q)</span></code> such that
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">p[i]</span> <span class="pre">x**i</span></code> is the numerator of the approximant,
+and <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">q[i]</span> <span class="pre">x**i</span></code> is the denominator. <code class="docutils literal notranslate"><span class="pre">q[0]</span></code> is
 normalized to 1.</p>
 </td>
 </tr>
@@ -396,12 +393,12 @@ normalized to 1.</p>
 <dl class="function">
 <dt id="g2tools.pade_gvar">
 <code class="descclassname">g2tools.</code><code class="descname">pade_gvar</code><span class="sig-paren">(</span><em>f</em>, <em>m</em>, <em>n</em>, <em>rtol='gavg'</em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.pade_gvar" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">[m,n]</span></code> Pade approximant to <code class="docutils literal"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">x**i</span></code> for <code class="docutils literal"><span class="pre">GVar</span></code>s.</p>
-<p>The <code class="docutils literal"><span class="pre">[m,n]</span></code> Pade approximant to a series given by
-<code class="docutils literal"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">*</span> <span class="pre">x**i</span></code> is the ratio of  polynomials of order <code class="docutils literal"><span class="pre">m</span></code>
-(numerator) and <code class="docutils literal"><span class="pre">n</span></code> (denominator) whose  Taylor expansion agrees
-with that of the original series up to order <code class="docutils literal"><span class="pre">m+n</span></code>.</p>
-<p>This code uses an SVD algorithm (see <a class="reference internal" href="#g2tools.pade_svd" title="g2tools.pade_svd"><code class="xref py py-func docutils literal"><span class="pre">pade_svd()</span></code></a>) to deal with
+<dd><p><code class="docutils literal notranslate"><span class="pre">[m,n]</span></code> Pade approximant to <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">x**i</span></code> for <code class="docutils literal notranslate"><span class="pre">GVar</span></code>s.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">[m,n]</span></code> Pade approximant to a series given by
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">*</span> <span class="pre">x**i</span></code> is the ratio of  polynomials of order <code class="docutils literal notranslate"><span class="pre">m</span></code>
+(numerator) and <code class="docutils literal notranslate"><span class="pre">n</span></code> (denominator) whose  Taylor expansion agrees
+with that of the original series up to order <code class="docutils literal notranslate"><span class="pre">m+n</span></code>.</p>
+<p>This code uses an SVD algorithm (see <a class="reference internal" href="#g2tools.pade_svd" title="g2tools.pade_svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">pade_svd()</span></code></a>) to deal with
 imprecision in the input data. It automatically reduces
 the order of the approximant if the extraction of Pade coefficients
 is too unstable given noise in the input data.</p>
@@ -410,24 +407,24 @@ is too unstable given noise in the input data.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>f</strong> – Array <code class="docutils literal"><span class="pre">f[i]</span></code> of power series coefficients for <code class="docutils literal"><span class="pre">i=0...n+m</span></code>.</li>
+<li><strong>f</strong> – Array <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> of power series coefficients for <code class="docutils literal notranslate"><span class="pre">i=0...n+m</span></code>.</li>
 <li><strong>m</strong> – Maximum order of polynomial in numerator of Pade
-approximant (<code class="docutils literal"><span class="pre">m&gt;=0</span></code>).</li>
+approximant (<code class="docutils literal notranslate"><span class="pre">m&gt;=0</span></code>).</li>
 <li><strong>n</strong> – Maximum order of polynomial in denominator of Pade
-approximant (<code class="docutils literal"><span class="pre">m&gt;=0</span></code>).</li>
-<li><strong>rtol</strong> (<em>float</em><em> or </em><em>str</em>) – If <code class="docutils literal"><span class="pre">rtol</span></code> is a string, it determines how the
+approximant (<code class="docutils literal notranslate"><span class="pre">m&gt;=0</span></code>).</li>
+<li><strong>rtol</strong> (<em>float</em><em> or </em><em>str</em>) – If <code class="docutils literal notranslate"><span class="pre">rtol</span></code> is a string, it determines how the
 relative tolerance is determined from the relative
-uncertainties in the <code class="docutils literal"><span class="pre">f[i]</span></code>. Set <code class="docutils literal"><span class="pre">rtol</span></code> equal to:
-<code class="docutils literal"><span class="pre">'gavg'</span></code> for the geometric mean (default); <code class="docutils literal"><span class="pre">'avg'</span></code> for
-the average; <code class="docutils literal"><span class="pre">'min'</span></code> for the minimum; or <code class="docutils literal"><span class="pre">'max'</span></code> for
+uncertainties in the <code class="docutils literal notranslate"><span class="pre">f[i]</span></code>. Set <code class="docutils literal notranslate"><span class="pre">rtol</span></code> equal to:
+<code class="docutils literal notranslate"><span class="pre">'gavg'</span></code> for the geometric mean (default); <code class="docutils literal notranslate"><span class="pre">'avg'</span></code> for
+the average; <code class="docutils literal notranslate"><span class="pre">'min'</span></code> for the minimum; or <code class="docutils literal notranslate"><span class="pre">'max'</span></code> for
 the maximum. Otherwise a number can be specified, in which case
-the uncertainties in <code class="docutils literal"><span class="pre">f[i]</span></code> are ignored.</li>
+the uncertainties in <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> are ignored.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple of power series coefficients <code class="docutils literal"><span class="pre">(p,</span> <span class="pre">q)</span></code> such that
-<code class="docutils literal"><span class="pre">sum_i</span> <span class="pre">p[i]</span> <span class="pre">x**i</span></code> is the numerator of the approximant,
-and <code class="docutils literal"><span class="pre">sum_i</span> <span class="pre">q[i]</span> <span class="pre">x**i</span></code> is the denominator. <code class="docutils literal"><span class="pre">q[0]</span></code> is
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple of power series coefficients <code class="docutils literal notranslate"><span class="pre">(p,</span> <span class="pre">q)</span></code> such that
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">p[i]</span> <span class="pre">x**i</span></code> is the numerator of the approximant,
+and <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">q[i]</span> <span class="pre">x**i</span></code> is the denominator. <code class="docutils literal notranslate"><span class="pre">q[0]</span></code> is
 normalized to 1.</p>
 </td>
 </tr>
@@ -446,7 +443,7 @@ normalized to 1.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">g2tools</span></code> Module</a><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">g2tools</span></code> Module</a><ul>
 <li><a class="reference internal" href="#g-2-anomaly">g-2 Anomaly</a></li>
 <li><a class="reference internal" href="#moments">Moments</a></li>
 <li><a class="reference internal" href="#subtracted-vacuum-polarization">Subtracted Vacuum Polarization</a></li>
@@ -457,15 +454,24 @@ normalized to 1.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="overview.html"
-                        title="previous chapter">Muon g-2 from Lattice QCD using <code class="docutils literal"><span class="pre">g2tools</span></code></a></p>
+                        title="previous chapter">Muon g-2 from Lattice QCD using <code class="docutils literal notranslate"><span class="pre">g2tools</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/g2tools.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -489,7 +495,7 @@ normalized to 1.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, G.P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>

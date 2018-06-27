@@ -47,7 +47,7 @@ def main():
 
     # integrate vpol to get a_mu and print result
     a_mu = g2.a_mu(vpol, Q=Q)
-    print('a_mu contribution =', a_mu)
+    print('1) a_mu contribution =', a_mu)
     print()
 
     # error budget for a_mu
@@ -56,12 +56,26 @@ def main():
         inputs=dict(G=G, Z=Z, ainv=ainv),
         ))
 
+    # do it again with exact vac. pol. instead of moments
+    vpol = g2.fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True)
+     # integrate vpol to get a_mu and print result
+    a_mu = g2.a_mu(vpol, Q=Q)
+    print('2) a_mu contribution =', a_mu)
+    print()
+
+    # error budget for a_mu
+    print(gv.fmt_errorbudget(
+        outputs=dict(a_mu=a_mu, mom4=mom[4]),
+        inputs=dict(G=G, Z=Z, ainv=ainv),
+        ))
+
+
 if __name__ == '__main__':
     main()
 
 
 # Created by G. Peter Lepage (Cornell University) on 2016-08-20.
-# Copyright (c) 2016 G. Peter Lepage.
+# Copyright (c) 2016-18 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
