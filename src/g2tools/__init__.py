@@ -8,22 +8,25 @@ The functions or classes include:
     moments(G)      --  compute moments of jj correlator G.
     mom2taylor(mom) --  convert moments in mom into Taylor coefficients
                         for q2-expansion.
-    taylor2mom(tayl)--  convert Taylor expansion coefficients tayl into moments.
+    taylor2mom(tayl)--  convert Taylor expansion coefficients tayl 
+                        into moments.
     vacpol(mom)     --  create a Pade approximant for the subtracted
                         vacuum polarization (Pi-hat) from the jj correlator
                         whose moments (or Taylor coefs) are in mom.
-    fourier_vacpol(G)-- create subtracted vacuum polarization (``PI-hat``) by
-                        Fourier transforming *jj* correlator ``G(t)``.
+    fourier_vacpol(G)-- create subtracted vacuum polarization (``PI-hat``) 
+                        by Fourier transforming *jj* correlator ``G(t)``.
     a_mu(pihat, Q)  --  compute the contribution to the muon's g-2
-                        anomaly from function pihat (usually built by vacpol).
+                        anomaly from function pihat (usually built 
+                        by vacpol).
     R2G(E, R)       --  create Euclidean G(t) from Re+e- data.
     R2a_mu(E, R)    --  calculate a_mu from Re+e- data.
-    pade_gvar(f,m,n)--  general-purpose code for determining Pade approximants
-                        to a power series whose coefficients are GVars.
-    pade_svd(f,m,n) --  general-purpose code for determining Pade approximants
-                        for a power series whose coefficients are floats.
-                        Uses SVD regularization to stabilize results when
-                        the input data are noisy.
+    pade_gvar(f,m,n)--  general-purpose code for determining Pade 
+                        approximants to a power series whose coefficients 
+                        are GVars.
+    pade_svd(f,m,n) --  general-purpose code for determining Pade 
+                        approximants for a power series whose coefficients 
+                        are floats. Uses SVD regularization to stabilize 
+                        results when the input data are noisy.
 
 A typical code sequence might look something like::
 
@@ -53,8 +56,9 @@ included::
     vacpol.vector(m, f) --  tree-level for vector with mass m
                             and decay constant f (eg, rho)
 
-This code requires the following Python modules: numpy, scipy, lsqfit, and gvar.
-The last two are available on pypi and also at https://github.com/gplepage.
+This code requires the following Python modules: numpy, scipy,
+lsqfit, and gvar. The last two are available on pypi and also 
+at https://github.com/gplepage.
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-09-13.
