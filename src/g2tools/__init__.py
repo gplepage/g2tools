@@ -16,6 +16,8 @@ The functions or classes include:
                         Fourier transforming *jj* correlator ``G(t)``.
     a_mu(pihat, Q)  --  compute the contribution to the muon's g-2
                         anomaly from function pihat (usually built by vacpol).
+    R2G(E, R)       --  create Euclidean G(t) from Re+e- data.
+    R2a_mu(E, R)    --  calculate a_mu from Re+e- data.
     pade_gvar(f,m,n)--  general-purpose code for determining Pade approximants
                         to a power series whose coefficients are GVars.
     pade_svd(f,m,n) --  general-purpose code for determining Pade approximants
@@ -56,7 +58,7 @@ The last two are available on pypi and also at https://github.com/gplepage.
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-09-13.
-# Copyright (c) 2014-2018  G. Peter Lepage.
+# Copyright (c) 2014-2022  G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,9 +71,13 @@ The last two are available on pypi and also at https://github.com/gplepage.
 # GNU General Public License for more details.
 from __future__ import division
 
+from ._version import __version__
+
 import gvar
 import lsqfit
 import numpy
+import math 
+
 try:
     from scipy.special import factorial as scipy_factorial
 except:
@@ -98,7 +104,11 @@ QMAX = 1e5
 TOL = 1e-8
 HMIN = 1e-12
 
-def moments(G, Z=1., ainv=1., periodic=True, tmin=None, tmax=None, nlist=[4,6,8,10,12,14]):
+def moments(
+    G, Z=1., ainv=1., periodic=True, tmin=None, 
+    tmax=None, nlist=[4,6,8,10,12,14],
+    filter=None
+    ):
     """ Compute t**n moments of correlator G.
 
     Compute ``sum_t t**n G(t)`` for ``n`` in ``nlist``, where both positive and
@@ -121,6 +131,10 @@ def moments(G, Z=1., ainv=1., periodic=True, tmin=None, tmax=None, nlist=[4,6,8,
             moments; ignored if ``None`` (default).
         nlist: List of moments to calculate. Default is
             ``nlist=[4,6,8...14]``.
+        filter: Correlator ``G`` is replaced by ``filter(G, t)`` 
+            before moments are calculated. Here ``t`` is an array of 
+            times (in same units as ``1/ainv``) corresponding 
+            to the elements of G. Ignored if ``filter=None`` (default).
 
     Returns:
         Dictionary ``Gmom`` where ``Gmom[n]`` is the ``n-th`` moment.
@@ -139,6 +153,8 @@ def moments(G, Z=1., ainv=1., periodic=True, tmin=None, tmax=None, nlist=[4,6,8,
         G = fG
     nt = len(G)
     t = numpy.arange(nt, dtype=float) / ainv
+    if filter is not None:
+        G = filter(G, t)
     if tmax is not None:
         idx = t <= tmax
         G = G[idx]
@@ -155,6 +171,195 @@ def moments(G, Z=1., ainv=1., periodic=True, tmin=None, tmax=None, nlist=[4,6,8,
         else:
             Gmom[n] = fac * numpy.sum(t ** n * G)
     return Gmom
+
+class TanhWin:
+    """ Window function from arXiv:1701.06874.
+
+    This is a correlator filter for use in :func:`moments` 
+    or :class:`fourier_vacpol`. It suppresses contributions
+    from ``t`` values less than ``t0`` and larger than ``t1``
+    using a step function smeared over width ``dt`` at 
+    the boundaries. 
+    
+    Args:
+        t0 (float or None): Low end of window (in fm). Ignored if 
+            ``t0=None`` (default) and contributons down to ``t=0`` 
+            are retained.
+        t1 (float or None): High end of window (in fm). Ignored if 
+            ``t1=None`` (default) and contributions out to infinite 
+            ``t`` are retained.
+        dt (float): Width of transitions (in fm). Default is ``dt=0.15``.
+    """
+    def __init__(self, t0=None, t1=None, dt=0.5):
+        self.t0 = t0 / 0.197326968 if t0 is not None else t0 
+        self.t1 = t1 / 0.197326968 if t1 is not None else t1
+        self.dt = dt / 0.197326968
+
+    @staticmethod 
+    def THETA(t, t0, dt):
+        """ Theta function from arXiv:1701.06874 """
+        return 0.5 * (1 + numpy.tanh((t - t0) / dt))
+
+    def __call__(self, G, t):
+        """ Returns ``G`` times the window function. """
+        THETA = TanhWin.THETA
+        if self.t0 is None:
+            if self.t1 is not None:
+                return G * (1 - THETA(t, self.t1, self.dt))
+        elif self.t1 is None:
+            return G * THETA(t, self.t0, self.dt)
+        else:
+            return G * (THETA(t, self.t0, self.dt) - THETA(t, self.t1, self.dt))
+        return G
+
+def R2a_mu(E, R, mmu=None, alpha=None, spline=True):
+    """ Calclate leading-order hadronic contribution to g-2 anomaly a_mu = (g-2)/2 from Re+e-(E).
+    
+    Args:
+        E (array): Energies at which ``R(E)`` is evaluated.
+        R (array): ``R[i]`` is the Re+e- value at energy ``E[i]``.
+            ``R[i]`` may be a float or a :class:`gvar.GVar` object (Gaussian
+            random variable).
+        ainv (float): Inverse grid spacing for the t-grid in GeV. 
+            Default is ``ainv=16.``.
+        T (float): Length of the t-grid in inverse GeV. 
+            Default is ``T=64``.
+        spline (bool): If ``True`` (default) use monotonic (Steffen) spline 
+            to evaluate the integral over ``s=E**2`` when calculating a_mu; 
+            otherwise use the Trapazoidal Rule. The latter is faster but 
+            less accurate.
+
+    Returns:
+        Value of a_mu corresponding to ``R(E)``.
+    """
+    np = numpy
+    if mmu is None:
+        mmu = Mmu 
+    if alpha is None:
+        alpha = ALPHA
+    E = numpy.asarray(E)
+    R = numpy.array(R)
+    x = s = E ** 2
+    y = R 
+    # see, eg, Achasov and Kiselev, arXiv:hep-ph/0202047v1, Eq (1)
+    # region 1
+    idx = (s < 4 * mmu**2)
+    a = 4 * mmu**2 / s[idx]
+    y[idx] *= 3 / a**3 / s[idx] ** 2 * (
+        16 * (a-2) * np.log(a / 4) 
+        - 2 * a * (8 - a)
+        - 8 * (a**2 - 8 * a + 8) * np.arctan(np.sqrt(a - 1)) / np.sqrt(a - 1)
+        )    
+    # region 2
+    idx = (s > 4 * mmu**2) & (s < 400 * mmu**2)
+    a = 4 * mmu**2 / s[idx]
+    y[idx] *= 3 / a**3 / s[idx] ** 2 * (
+        16 * (a-2) * np.log(a / 4) 
+        - 2 * a * (8 - a)
+        - 8 * (a**2 - 8 * a + 8) * np.arctanh(np.sqrt(1 - a)) / np.sqrt(1 - a)
+        )    
+    # region 3 (expansion of kernel from region 2)
+    idx = (s >= 400 * mmu**2)
+    a = 4 * mmu**2 / s[idx]
+    loga_4 = np.log(a/4)
+    y[idx] *= 3 / a**3 / s[idx] ** 2 * (
+        a**3/3 + a**4*(loga_4/4 + 25/48) + a**5*(3*loga_4/8 + 97/160) 
+        + a**6*(7*loga_4/16 + 13/20) + a**7*(15*loga_4/32 + 451/672)
+        + a**8*(495*loga_4/1024 + 38953/57344) + a**9*(1001*loga_4/2048 + 501197/737280)
+        )
+    # protect against point with s = 4 * mmu**2
+    idx = (s < 4 * mmu**2) | (s > 4 * mmu**2)
+    s = s[idx]
+    y = y[idx]
+    if spline:
+        spl = gvar.cspline.CSpline(s, y)
+        return spl.integ(spl.x[-1]) * (alpha * mmu / 3 / np.pi) ** 2
+    else:
+        return numpy.sum(
+            (y[1:] + y[:-1]) * (s[1:] - s[:-1])
+            ) / 2 * (alpha * mmu / 3 / np.pi) ** 2
+
+def R2G(E, R, ainv=16., T=64., periodic=False, spline=True):
+    """ Calculate Euclidean correlator G(t) from data for Re+e-(E).
+    
+    ``G(t)`` is evaluated on a uniform Euclidean grid with 
+    grid spacing ``1/ainv`` and ``t <= T``. ``G(0)`` is set 
+    equal to zero. ``G(t)`` is calculated in lattice units;
+    multiply by ``ainv**3`` to convert to physical units.
+
+    Args:
+        E (array): Energies at which ``R(E)`` is evaluated.
+        R (array): ``R[i]`` is the Re+e- value at energy ``E[i]``. This
+            ``R[i]`` may be a float or a :class:`gvar.GVar` object (Gaussian
+            random variable).
+        ainv (float): Inverse grid spacing for the t-grid in GeV. 
+            Default is ``ainv=16.``.
+        T (float): Length of the t-grid in inverse GeV. 
+            Default is ``T=64``.
+        spline (bool): If ``True`` (default) use monotonic (Steffen) spline 
+            to evaluate the integral over ``s=E**2`` when calculating a_mu; 
+            otherwise use the Trapazoidal Rule. The latter is faster but 
+            less accurate.
+
+    Returns:
+        Array ``G[i]`` of values of the Euclidean correlator 
+        in lattice units on the t-grid.
+    """
+    t = numpy.arange(0, T, 1./ainv)
+    G = numpy.zeros(len(t), object)
+    E = numpy.asarray(E)
+    R = numpy.asarray(R)
+
+    x = E 
+    for i, ti in enumerate(t[1:]):
+        # Bernecker-Meyer arxiv:1107.4388, Eq (77)
+        y = R * E ** 2 * numpy.exp(-E * ti) / (12 * numpy.pi ** 2)
+        if spline:
+            # make spline and integrate
+            G[i + 1] = gvar.cspline.CSpline(x, y).integ(x[-1])
+        else:
+            # Trapazoidal Rule
+            G[i + 1] = numpy.sum((y[1:] + y[:-1]) * (x[1:] - x[:-1])) / 2.  
+    # fix/optimize data types and convert to lattice units
+    G[0] = G[1] * 0.0  
+    return numpy.array([Gi for Gi in G]) / ainv ** 3
+
+# def R2G(E, R, ainv=16., T=64., periodic=False):
+#     """ Calculate Euclidean correlator G(t) from data for Re+e-(E).
+    
+#     ``G(t)`` is evaluated on a uniform Euclidean grid with 
+#     grid spacing ``1/ainv`` and ``t <= T``. ``G(0)`` is set 
+#     equal to zero. ``G(t)`` is calculated in lattice units;
+#     multiply by ``ainv**3`` to convert to physical units.
+
+#     Args:
+#         E (array): Energies at which ``R(E)`` is evaluated.
+#         R (array): ``R[i]`` is the Re+e- value at energy ``E[i]``. This
+#             ``R[i]`` may be a float or a :class:`gvar.GVar` object (Gaussian
+#             random variable).
+#         ainv (float): Inverse grid spacing for the t-grid in GeV. 
+#             Default is ``ainv=16.``.
+#         T (float): Length of the t-grid in inverse GeV. 
+#             Default is ``T=64``.
+
+#     Returns:
+#         Array ``G[i]`` of values of the Euclidean correlator 
+#         in lattice units on the t-grid.
+#     """
+#     t = numpy.arange(0, T, 1./ainv)
+#     G = numpy.zeros(len(t), object)
+#     E = numpy.asarray(E)
+#     R = numpy.asarray(R)
+
+#     # make spline
+#     x = E 
+#     for i, ti in enumerate(t[1:]):
+#         # Bernecker-Meyer arxiv:1107.4388, Eq (77)
+#         y = R * E ** 2 * numpy.exp(-E * ti) / (12 * numpy.pi ** 2)
+#         G[i + 1] = gvar.cspline.CSpline(x, y).integ(x[-1])
+#     # fix/optimize data types and convert to lattice units
+#     G[0] = G[1] * 0.0   
+#     return numpy.array([Gi for Gi in G]) / ainv ** 3
 
 def oldmoments(G, Z=1., ainv=1., periodic=True, tmin=None, nlist=[4,6,8,10,12,14,16,18,20]):
     """ Compute t**n moments of correlator G.
@@ -226,7 +431,7 @@ def a_mu(
             suppressed.
 
     Returns:
-        Value of ``a_mu`` corresponding to ``Q**2 * vacpol``.
+        Value of a_mu corresponding to ``Q**2 * vacpol``.
     """
     if mmu is None:
         mmu = Mmu
@@ -291,7 +496,9 @@ class fourier_vacpol(object):
         Z: Renormalization factor for current (correlator multiplied
             by ``Z**2``). Defaul is 1.
         ainv: Inverse lattice spacing used to convert Fourier transform to
-            physical units. Default is 1.
+            physical units. Default is 1. (Note that ``G`` in physical 
+            units is obtained by multiplying ``G`` in lattice units by 
+            ``ainv**3``.)
         tmin: If not ``None``, include only ``t >= tmin`` (same units
             as ``1/ainv``).
         tmax: If not ``None``, include only ``t < tmax`` (same units
@@ -300,8 +507,12 @@ class fourier_vacpol(object):
             ``periodic=False`` implies ``G[t]`` is not periodic and
             is specified for only non-negative ``t`` values
             (results are doubled to account for negative ``t``).
-    """
-    def __init__(self, G, Z=1., ainv=1., periodic=True, tmin=None, tmax=None):
+        filter: Correlator ``G`` is replaced by ``filter(G, t)`` 
+            before moments are calculated. Here ``t`` is an array of 
+            times (in physical units if ``ainv!=1``) corresponding 
+            to the elements of G. Ignored if ``filter=None`` (default).
+"""
+    def __init__(self, G, Z=1., ainv=1., periodic=True, tmin=None, tmax=None, filter=None):
         G = numpy.array(G)
         if periodic:
             nG = len(G)
@@ -318,8 +529,11 @@ class fourier_vacpol(object):
         # In next expression should be ainv**3 except for factor of 1/ainv
         # associated with the t integral in __call__. So self.G_ainv is
         # G / ainv.
+        self.t = numpy.arange(len(self.G)) / ainv   # q is in phys units
+        if filter is not None:
+            self.G = filter(self.G, self.t)
         self.G_ainv = self.G * Z**2 * ainv**2
-        self.t = numpy.arange(len(self.G_ainv)) / ainv   # q is in phys units
+        self.ainv = ainv
         self.t2 = self.t ** 2
         if tmin is not None:
             self.G_ainv[self.t < tmin] *= 0
@@ -329,10 +543,31 @@ class fourier_vacpol(object):
 
     def __call__(self, q2):
         # N.B. factor of 1/ainv needed for t-integral inncluded in self.G
-        return numpy.sum(
-            (self.t2 - 4 * (numpy.sin((q2 ** 0.5/2.) * self.t))**2 / q2) *
-            self.G_ainv
-            )
+        if numpy.shape(q2) == ():
+            return numpy.sum(
+                (self.t2 - 4 * (numpy.sin((q2 ** 0.5/2.) * self.t))**2 / q2) *
+                self.G_ainv
+                )
+        else:
+            q2shape = numpy.shape(q2)
+            q2 = numpy.asarray(q2).flatten()[None, :]
+            ans = numpy.sum(
+                (self.t2[:, None] - 4 * (numpy.sin((q2 ** 0.5/2.) * self.t[:, None]))**2 / q2) *
+                self.G_ainv[:, None],
+                axis=0
+                )
+            return ans.reshape(q2shape)
+
+def fsum(a):
+    ashape = numpy.shape(a)
+    a = numpy.asarray(a).flat
+    if isinstance(a[0], gvar.GVar):
+        sum_a = fsum(gvar.mean(a))
+        ans = numpy.sum(a)
+        ans = ans - ans.mean + sum_a 
+    else:
+        ans = math.fsum(a)
+    return ans
 
 class vacpol(object):
     """ Subtracted vac. pol'n (``Pi-hat(q2)``) from correlator moments ``g[n]``.
@@ -481,13 +716,16 @@ class vacpol(object):
         # ampl is amplitude for q2 * Pi-hat(q2) hence extra factor of pole.
         self.ampl = self.residues * self.poles/ 2. / self.E
         # calculate residual polynomial - not used for anything!
-        # q2 = gvar.powerseries.PowerSeries(
-        #     [0., 1.], order=num.order - den.order + 1
-        #     )
-        # self.direct = (
-        #     q2 * num / den -
-        #     numpy.sum( [r / (q2 - p) for r,p in zip(self.residues, self.poles)])
-        #     )
+        # for (n,n) Pade is just a constant, which gives a delta 
+        # function and so only affects G(t=0) (true with discrete t
+        # as well).
+        q2 = gvar.powerseries.PowerSeries(
+            [0., 1.], order=num.order - den.order + 1
+            )
+        self.direct = (
+            q2 * num / den -
+            numpy.sum( [r / (q2 - p) for r,p in zip(self.residues, self.poles)])
+            )
 
     @staticmethod
     def rescale(c, scale):

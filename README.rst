@@ -27,10 +27,19 @@ polarization. The functions or classes include:
         Compute the contribution to the muon's *g-2*
         anomaly from function pihat (usually built by vacpol).
 
+    **R2G(E, R)**
+        Compute the Euclidean G(t) corresponding to data 
+        for Re+e-.
+
+    **R2a_mu(E, R)**
+        Compute the leading-order contribution to the 
+        muon's *g-2* anomaly corresponding to data 
+        for Re+e-.
+
     **pade_gvar(f,m,n)**
         General-purpose code for determining Pade approximants
         to a power series whose coefficients are ``GVar``\s (ie,
-        Gaussian random variables -- for error propagation).
+        Gaussian random variables, for error propagation).
 
     **pade_svd(f,m,n)**
         General-purpose code for determining Pade approximants
@@ -42,7 +51,7 @@ Information on how to install the module is in the file INSTALLATION.
 
 To test the module try ``make tests``.
 
-Documentation is in the doc directory --- open doc/html/index.html
+Documentation is in the doc directory: open doc/html/index.html
 or look online at <https://g2tools.readthedocs.io>.
 
 The examples directory has a complete example, showing how to go from Monte
@@ -53,5 +62,9 @@ The general technique that underlies this module is described in
 Chakraborty *et al*, Phys.Rev. D89 (2014) no.11, 114501. Google
 ``arXiv:1403.1778`` to find a preprint on the web.
 
-Created by G. Peter Lepage (Cornell University) on on 2014-09-13.
-Copyright (c) 20014-18 G. Peter Lepage.
+| Created by G. Peter Lepage (Cornell University) on on 2014-09-13.
+| Copyright (c) 20014-18 G. Peter Lepage.
+
+.. image:: https://zenodo.org/badge/66222496.svg
+   :target: https://zenodo.org/badge/latestdoi/66222496
+

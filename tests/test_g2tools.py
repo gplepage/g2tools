@@ -1,7 +1,7 @@
 """
 test_g2tools.py
 """
-# Copyright (c) 2016-17 G. Peter Lepage.
+# Copyright (c) 2016-22 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +30,16 @@ if SHOW_OUTPUT:
 MPI = 0.13957
 MK = 0.4937
 
+def TMNMX(tmin=None, tmax=None):
+    """ Implements tmin and tmax using TanhWin """
+    dt = 1e-5
+    # convert to fm from units of 1/ainv
+    if tmin is not None:
+        tmin *= 0.197326968
+    if tmax is not None:
+        tmax *= 0.197326968
+    return TanhWin(t0=tmin, t1=tmax, dt=dt)
+
 class test_g2tools(unittest.TestCase):
     def setUp(self):
         pass
@@ -42,7 +52,7 @@ class test_g2tools(unittest.TestCase):
         optprint('\n=========== Test moments')
         mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4])
         assert mom[0] == 11. and mom[2] == 28. and mom[4] == 100.
-        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], tmax=1.)
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], tmax=1.1)
         assert mom[0] == 5. and mom[2] == 4. and mom[4] == 4.
         mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], tmin=1.1)
         assert mom[0] == 6. and mom[2] == 24. and mom[4] == 96.
@@ -50,7 +60,7 @@ class test_g2tools(unittest.TestCase):
         assert mom[0] == 11. and mom[2] == 28. and mom[4] == 100.
         mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False)
         assert mom[0] == 15. and mom[2] == 64. and mom[4] == 424.
-        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, tmax=1.)
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, tmax=1.1)
         assert mom[0] == 5. and mom[2] == 4. and mom[4] == 4.
         mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, tmin=1.1)
         assert mom[0] == 10. and mom[2] == 60. and mom[4] == 420.
@@ -60,7 +70,29 @@ class test_g2tools(unittest.TestCase):
         assert numpy.allclose(mom2taylor(mom), tayl)
         optprint('nothing to report -- all is good')
 
-    def test_moments_tmin_tmax(self):
+    def test_moments_win(self):
+        """ moments with windows """
+        # periodic = True
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], filter=TMNMX(tmin=1.9, tmax=2.1))
+        assert mom[0] == 6. and mom[2] == 24. and mom[4] == 96.
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], filter=TMNMX(tmax=1.1))
+        # mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], tmax=1.1)
+        assert mom[0] == 5. and mom[2] == 4. and mom[4] == 4.
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], filter=TMNMX(tmin=1.1))
+        # mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], tmin=1.1)
+        assert mom[0] == 6. and mom[2] == 24. and mom[4] == 96.
+
+        # periodic = False
+        mom = moments([1., 2., 3., 2.], periodic=False, nlist=[0, 2, 4], filter=TMNMX(tmin=1.9, tmax=2.1))
+        assert mom[0] == 6. and mom[2] == 24. and mom[4] == 96.
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, filter=TMNMX(tmax=1.1))
+        # mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, tmax=1.1)
+        assert mom[0] == 5. and mom[2] == 4. and mom[4] == 4.
+        mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, filter=TMNMX(tmin=1.1))
+        # mom = moments([1., 2., 3., 2.], nlist=[0, 2, 4], periodic=False, tmin=1.1)
+        assert mom[0] == 10. and mom[2] == 60. and mom[4] == 420.
+ 
+    def test_moments_fourier(self):
         " moments vs fourier "
         optprint('\n=========== moments vs fourier')
         # fake data --- N=3 states
@@ -331,8 +363,8 @@ class test_g2tools(unittest.TestCase):
 
         # fourier analysis
         fvpol = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False)
-        fvpolp = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False, tmin=10.)
-        fvpolm = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False, tmax=10.)
+        fvpolp = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False, filter=TMNMX(tmin=10.))
+        fvpolm = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=False, filter=TMNMX(tmax=10.))
         a_mu_all = a_mu(fvpol, qmax=1000.)
         a_mu_p = a_mu(fvpolp, qmax=1000.)
         a_mu_m = a_mu(fvpolm, qmax=1000.)
@@ -383,8 +415,8 @@ class test_g2tools(unittest.TestCase):
 
             # fourier analysis
             fvpol = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True)
-            fvpolp = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True, tmin=10.)
-            fvpolm = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True, tmax=10.)
+            fvpolp = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True, filter=TMNMX(tmin=10.))
+            fvpolm = fourier_vacpol(G, ainv=ainv, Z=Z, periodic=True, filter=TMNMX(tmax=10.))
             a_mu_all = a_mu(fvpol, qmax=1000.)
             a_mu_p = a_mu(fvpolp, qmax=1000.)
             a_mu_m = a_mu(fvpolm, qmax=1000.)
@@ -459,6 +491,43 @@ class test_g2tools(unittest.TestCase):
             vpol = vacpol(vacpol.vector(m, f, n=10).taylor(), order=(3,3), warn=True)
             self.assertTrue(w)
             self.assertEqual(vpol.order, (1,1))
+
+    def test_R(self):
+        """ R2G and R2a_mu """
+        E = 1.02 ** np.arange(0, 25) * 0.5
+        R = np.zeros(len(E), object)
+        R[:] = gv.gvar('11(3)') / 3
+        R[E < 9.] = gv.gvar('10(3)') / 3
+        R[E < 3.0] = gv.gvar('2.0(6)')
+        ainv = 8.
+        for spline in [True, False]:
+            G = R2G(E, R, ainv=ainv, spline=True)
+            vpol = fourier_vacpol(G, ainv=ainv, periodic=False)
+            amuG = a_mu(vpol) * 1e10
+            amuR = R2a_mu(E, R, spline=True) * 1e10
+            self.assertEqual(amuG.fmt(), '274(82)')
+            self.assertEqual(amuR.fmt(), '274(82)')
+
+    def test_R_win(self):
+        """ R2G and TanhWin """
+        E = 1.02 ** np.arange(0, 25) * 0.5
+        R = np.zeros(len(E), object)
+        R[:] = gv.gvar('11(3)') / 3
+        R[E < 9.] = gv.gvar('10(3)') / 3
+        R[E < 3.0] = gv.gvar('2.0(6)')
+        ainv = 8.
+        G = R2G(E, R, ainv=ainv)
+        vpol = fourier_vacpol(G, ainv=ainv, periodic=False)
+        amu = a_mu(vpol) * 1e10
+        self.assertEqual(amu.fmt(), '274(82)')
+        vpol = fourier_vacpol(G, ainv=ainv, periodic=False, filter=TanhWin(t1=1.5, dt=0.5))
+        amu_sm = a_mu(vpol) * 1e10
+        vpol = fourier_vacpol(G, ainv=ainv, periodic=False, filter=TanhWin(t0=1.5, dt=0.5))
+        amu_l = a_mu(vpol) * 1e10
+        self.assertEqual(amu_sm.fmt(), '142(43)')
+        self.assertEqual(amu_l.fmt(), '132(40)')
+        self.assertEqual((amu_sm + amu_l).fmt(), '274(82)')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -6,6 +6,9 @@
 g2tools Documentation
 ===================================
 
+.. image:: https://zenodo.org/badge/66222496.svg
+   :target: https://zenodo.org/badge/latestdoi/66222496
+
 Contents:
 
 .. toctree::
@@ -22,4 +25,5 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
 

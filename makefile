@@ -40,18 +40,18 @@ doc-html:
 doc/html/index.html : $(DOCFILES) $(SRCFILES)
 	rm -rf doc/html; sphinx-build -b html doc/source doc/html
 
-doc-pdf:
-	make doc/g2tools.pdf
+# doc-pdf:
+# 	make doc/g2tools.pdf
 
-doc/g2tools.pdf : $(DOCFILES) $(SRCFILES)
-	rm -rf doc/g2tools.pdf
-	sphinx-build -b latex doc/source doc/latex
-	cd doc/latex; make g2tools.pdf; mv g2tools.pdf ..
+# doc/g2tools.pdf : $(DOCFILES) $(SRCFILES)
+# 	rm -rf doc/g2tools.pdf
+# 	sphinx-build -b latex doc/source doc/latex
+# 	cd doc/latex; make g2tools.pdf; mv g2tools.pdf ..
 
 doc-zip doc.zip:
 	cd doc/html; zip -r doc *; mv doc.zip ../..
 
-doc-all: doc-html doc-pdf
+doc-all: doc-html # doc-pdf
 
 sdist:			# source distribution
 	$(PYTHON) setup.py sdist
@@ -75,7 +75,7 @@ upload-pypi:
 
 upload-git:
 	echo  "version $(VERSION)"
-	make doc-html doc-pdf
+	make doc-html # doc-pdf
 	git diff --exit-code
 	git diff --cached --exit-code
 	git push origin master
@@ -88,6 +88,9 @@ tag-git:
 test-download:
 	-$(PIP) uninstall g2tools
 	$(PIP) install g2tools --no-cache-dir
+
+test-readme:
+	python setup.py --long-description | rst2html.py > README.html
 
 clean:
 	rm -f -r build
