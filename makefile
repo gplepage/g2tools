@@ -28,13 +28,16 @@ install install-sys :
 uninstall :			# mostly works (may leave some empty directories)
 	$(PIP) uninstall g2tools
 
+update: 
+	make uninstall install
+
 try:
 	$(PYTHON) setup.py install --user --record files-g2tools.$(PYTHONVERSION)
 
 untry:
 	- cat files-g2tools.$(PYTHONVERSION) | xargs rm -rf
 
-doc-html:
+doc-html: src/g2tools/__init__.py src/g2tools/_version.py doc/source/overview.rst doc/source/g2tools.rst
 	make doc/html/index.html
 
 doc/html/index.html : $(DOCFILES) $(SRCFILES)

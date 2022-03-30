@@ -18,8 +18,8 @@ The functions or classes include:
     a_mu(pihat, Q)  --  compute the contribution to the muon's g-2
                         anomaly from function pihat (usually built 
                         by vacpol).
-    R2G(E, R)       --  create Euclidean G(t) from Re+e- data.
-    R2a_mu(E, R)    --  calculate a_mu from Re+e- data.
+    R2G(E, R)       --  create Euclidean G(t) from |Re+e-| data.
+    R2a_mu(E, R)    --  calculate a_mu from |Re+e-| data.
     pade_gvar(f,m,n)--  general-purpose code for determining Pade 
                         approximants to a power series whose coefficients 
                         are GVars.
@@ -217,11 +217,11 @@ class TanhWin:
         return G
 
 def R2a_mu(E, R, mmu=None, alpha=None, spline=True):
-    """ Calclate leading-order hadronic contribution to g-2 anomaly a_mu = (g-2)/2 from Re+e-(E).
+    """ Calclate leading-order hadronic contribution to g-2 anomaly a_mu = (g-2)/2 from |Re+e-|\ (E).
     
     Args:
         E (array): Energies at which ``R(E)`` is evaluated.
-        R (array): ``R[i]`` is the Re+e- value at energy ``E[i]``.
+        R (array): ``R[i]`` is the |Re+e-| value at energy ``E[i]``.
             ``R[i]`` may be a float or a :class:`gvar.GVar` object (Gaussian
             random variable).
         ainv (float): Inverse grid spacing for the t-grid in GeV. 
@@ -284,7 +284,7 @@ def R2a_mu(E, R, mmu=None, alpha=None, spline=True):
             ) / 2 * (alpha * mmu / 3 / np.pi) ** 2
 
 def R2G(E, R, ainv=16., T=64., periodic=False, spline=True):
-    """ Calculate Euclidean correlator G(t) from data for Re+e-(E).
+    """ Calculate Euclidean correlator G(t) from data for |Re+e-|\ (E).
     
     ``G(t)`` is evaluated on a uniform Euclidean grid with 
     grid spacing ``1/ainv`` and ``t <= T``. ``G(0)`` is set 
@@ -293,7 +293,7 @@ def R2G(E, R, ainv=16., T=64., periodic=False, spline=True):
 
     Args:
         E (array): Energies at which ``R(E)`` is evaluated.
-        R (array): ``R[i]`` is the Re+e- value at energy ``E[i]``. This
+        R (array): ``R[i]`` is the |Re+e-| value at energy ``E[i]``. This
             ``R[i]`` may be a float or a :class:`gvar.GVar` object (Gaussian
             random variable).
         ainv (float): Inverse grid spacing for the t-grid in GeV. 

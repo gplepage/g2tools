@@ -10,6 +10,8 @@
 
 .. |GVar| replace:: :class:`gvar.GVar`
 
+.. |Re+e-| replace:: R\ :sub:`e+e-`
+
 g-2 Anomaly
 -------------
 The main tool for calculating the muon's anomaly is:
@@ -49,6 +51,16 @@ represented by the following classes:
 
 
 .. autoclass:: g2tools.fourier_vacpol
+
+|Re+e-|
+---------
+
+There are two tools for analyzing data from e+e- annihilation to hadrons (|Re+e-|\ (E)):
+
+.. autofunction:: g2tools.R2G
+
+.. autofunction:: g2tools.R2a_mu
+
 
 Padé Approximants
 -------------------

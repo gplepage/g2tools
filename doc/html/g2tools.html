@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>g2tools Module &#8212; g2tools 1.3.4 documentation</title>
+    <title>g2tools Module &#8212; g2tools 1.3.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="overview.html" title="Muon g-2 from Lattice QCD using g2tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">g2tools 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">g2tools 1.3.5 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">g2tools</span></code> Module</a></li> 
       </ul>
     </div>  
@@ -77,7 +77,7 @@ suppressed.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Value of <code class="docutils literal notranslate"><span class="pre">a_mu</span></code> corresponding to <code class="docutils literal notranslate"><span class="pre">Q**2</span> <span class="pre">*</span> <span class="pre">vacpol</span></code>.</p>
+<dd class="field-even"><p>Value of a_mu corresponding to <code class="docutils literal notranslate"><span class="pre">Q**2</span> <span class="pre">*</span> <span class="pre">vacpol</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -113,7 +113,7 @@ moments; ignored if <code class="docutils literal notranslate"><span class="pre"
 <code class="docutils literal notranslate"><span class="pre">nlist=[4,6,8...14]</span></code>.</p></li>
 <li><p><strong>filter</strong> – Correlator <code class="docutils literal notranslate"><span class="pre">G</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">filter(G,</span> <span class="pre">t)</span></code>
 before moments are calculated. Here <code class="docutils literal notranslate"><span class="pre">t</span></code> is an array of
-times (in physical units if <code class="docutils literal notranslate"><span class="pre">ainv!=1</span></code>) corresponding
+times (in same units as <code class="docutils literal notranslate"><span class="pre">1/ainv</span></code>) corresponding
 to the elements of G. Ignored if <code class="docutils literal notranslate"><span class="pre">filter=None</span></code> (default).</p></li>
 </ul>
 </dd>
@@ -306,7 +306,9 @@ otherwise. <code class="docutils literal notranslate"><span class="pre">G</span>
 <li><p><strong>Z</strong> – Renormalization factor for current (correlator multiplied
 by <code class="docutils literal notranslate"><span class="pre">Z**2</span></code>). Defaul is 1.</p></li>
 <li><p><strong>ainv</strong> – Inverse lattice spacing used to convert Fourier transform to
-physical units. Default is 1.</p></li>
+physical units. Default is 1. (Note that <code class="docutils literal notranslate"><span class="pre">G</span></code> in physical
+units is obtained by multiplying <code class="docutils literal notranslate"><span class="pre">G</span></code> in lattice units by
+<code class="docutils literal notranslate"><span class="pre">ainv**3</span></code>.)</p></li>
 <li><p><strong>tmin</strong> – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, include only <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">&gt;=</span> <span class="pre">tmin</span></code> (same units
 as <code class="docutils literal notranslate"><span class="pre">1/ainv</span></code>).</p></li>
 <li><p><strong>tmax</strong> – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, include only <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">&lt;</span> <span class="pre">tmax</span></code> (same units
@@ -320,6 +322,69 @@ before moments are calculated. Here <code class="docutils literal notranslate"><
 times (in physical units if <code class="docutils literal notranslate"><span class="pre">ainv!=1</span></code>) corresponding
 to the elements of G. Ignored if <code class="docutils literal notranslate"><span class="pre">filter=None</span></code> (default).</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="re-e">
+<h2>R<sub>e+e-</sub><a class="headerlink" href="#re-e" title="Permalink to this headline">¶</a></h2>
+<p>There are two tools for analyzing data from e+e- annihilation to hadrons (R<sub>e+e-</sub>(E)):</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="g2tools.R2G">
+<span class="sig-prename descclassname"><span class="pre">g2tools.</span></span><span class="sig-name descname"><span class="pre">R2G</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ainv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.R2G" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Euclidean correlator G(t) from data for R<sub>e+e-</sub>(E).</p>
+<p><code class="docutils literal notranslate"><span class="pre">G(t)</span></code> is evaluated on a uniform Euclidean grid with
+grid spacing <code class="docutils literal notranslate"><span class="pre">1/ainv</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">&lt;=</span> <span class="pre">T</span></code>. <code class="docutils literal notranslate"><span class="pre">G(0)</span></code> is set
+equal to zero. <code class="docutils literal notranslate"><span class="pre">G(t)</span></code> is calculated in lattice units;
+multiply by <code class="docutils literal notranslate"><span class="pre">ainv**3</span></code> to convert to physical units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>E</strong> (<em>array</em>) – Energies at which <code class="docutils literal notranslate"><span class="pre">R(E)</span></code> is evaluated.</p></li>
+<li><p><strong>R</strong> (<em>array</em>) – <code class="docutils literal notranslate"><span class="pre">R[i]</span></code> is the R<sub>e+e-</sub> value at energy <code class="docutils literal notranslate"><span class="pre">E[i]</span></code>. This
+<code class="docutils literal notranslate"><span class="pre">R[i]</span></code> may be a float or a <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code> object (Gaussian
+random variable).</p></li>
+<li><p><strong>ainv</strong> (<em>float</em>) – Inverse grid spacing for the t-grid in GeV.
+Default is <code class="docutils literal notranslate"><span class="pre">ainv=16.</span></code>.</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Length of the t-grid in inverse GeV.
+Default is <code class="docutils literal notranslate"><span class="pre">T=64</span></code>.</p></li>
+<li><p><strong>spline</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default) use monotonic (Steffen) spline
+to evaluate the integral over <code class="docutils literal notranslate"><span class="pre">s=E**2</span></code> when calculating a_mu;
+otherwise use the Trapazoidal Rule. The latter is faster but
+less accurate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array <code class="docutils literal notranslate"><span class="pre">G[i]</span></code> of values of the Euclidean correlator
+in lattice units on the t-grid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="g2tools.R2a_mu">
+<span class="sig-prename descclassname"><span class="pre">g2tools.</span></span><span class="sig-name descname"><span class="pre">R2a_mu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mmu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.R2a_mu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calclate leading-order hadronic contribution to g-2 anomaly a_mu = (g-2)/2 from R<sub>e+e-</sub>(E).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>E</strong> (<em>array</em>) – Energies at which <code class="docutils literal notranslate"><span class="pre">R(E)</span></code> is evaluated.</p></li>
+<li><p><strong>R</strong> (<em>array</em>) – <code class="docutils literal notranslate"><span class="pre">R[i]</span></code> is the R<sub>e+e-</sub> value at energy <code class="docutils literal notranslate"><span class="pre">E[i]</span></code>.
+<code class="docutils literal notranslate"><span class="pre">R[i]</span></code> may be a float or a <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code> object (Gaussian
+random variable).</p></li>
+<li><p><strong>ainv</strong> (<em>float</em>) – Inverse grid spacing for the t-grid in GeV.
+Default is <code class="docutils literal notranslate"><span class="pre">ainv=16.</span></code>.</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Length of the t-grid in inverse GeV.
+Default is <code class="docutils literal notranslate"><span class="pre">T=64</span></code>.</p></li>
+<li><p><strong>spline</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default) use monotonic (Steffen) spline
+to evaluate the integral over <code class="docutils literal notranslate"><span class="pre">s=E**2</span></code> when calculating a_mu;
+otherwise use the Trapazoidal Rule. The latter is faster but
+less accurate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value of a_mu corresponding to <code class="docutils literal notranslate"><span class="pre">R(E)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -423,6 +488,7 @@ normalized to 1.</p>
 <li><a class="reference internal" href="#g-2-anomaly">g-2 Anomaly</a></li>
 <li><a class="reference internal" href="#moments">Moments</a></li>
 <li><a class="reference internal" href="#subtracted-vacuum-polarization">Subtracted Vacuum Polarization</a></li>
+<li><a class="reference internal" href="#re-e">R<sub>e+e-</sub></a></li>
 <li><a class="reference internal" href="#pade-approximants">Padé Approximants</a></li>
 </ul>
 </li>
@@ -464,7 +530,7 @@ normalized to 1.</p>
         <li class="right" >
           <a href="overview.html" title="Muon g-2 from Lattice QCD using g2tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">g2tools 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">g2tools 1.3.5 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">g2tools</span></code> Module</a></li> 
       </ul>
     </div>
