@@ -69,6 +69,21 @@ def main():
         inputs=dict(G=G, Z=Z, ainv=ainv),
         ))
 
+    # do it again with a window
+    vpol = g2.fourier_vacpol(
+        G, ainv=ainv, Z=Z, periodic=True, filter=g2.TanhWin(t1=1.5, dt=0.15)
+        )
+     # integrate vpol to get a_mu and print result
+    a_mu = g2.a_mu(vpol, Q=Q)
+    print('3) a_mu contribution (win) =', a_mu)
+    print()
+
+    # error budget for a_mu
+    print(gv.fmt_errorbudget(
+        outputs=dict(a_mu=a_mu, mom4=mom[4]),
+        inputs=dict(G=G, Z=Z, ainv=ainv),
+        ))
+
 
 if __name__ == '__main__':
     main()
