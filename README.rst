@@ -36,12 +36,16 @@ polarization. The functions or classes include:
         muon's *g-2* anomaly corresponding to data 
         for Re+e-.
 
-    **pade_gvar(f,m,n)**
+    **TanhWin(t0, t1, dt)**
+        Create a filter for applying a t-window in 
+        ``monents(...)`` or ``fourier_vacpol(...)``.
+
+    **pade_gvar(f, m, n)**
         General-purpose code for determining Pade approximants
         to a power series whose coefficients are ``GVar``\s (ie,
         Gaussian random variables, for error propagation).
 
-    **pade_svd(f,m,n)**
+    **pade_svd(f, m, n)**
         General-purpose code for determining Pade approximants
         for a power series whose coefficients are floats.
         Uses *svd* regularization to stabilize results when
@@ -63,7 +67,7 @@ Chakraborty *et al*, Phys.Rev. D89 (2014) no.11, 114501. Google
 ``arXiv:1403.1778`` to find a preprint on the web.
 
 | Created by G. Peter Lepage (Cornell University) on on 2014-09-13.
-| Copyright (c) 20014-18 G. Peter Lepage.
+| Copyright (c) 20014-22 G. Peter Lepage.
 
 .. image:: https://zenodo.org/badge/66222496.svg
    :target: https://zenodo.org/badge/latestdoi/66222496
