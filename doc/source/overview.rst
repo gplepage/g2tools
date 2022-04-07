@@ -126,7 +126,19 @@ the Fourier method is simpler to code::
         inputs=dict(G=G, Z=Z, ainv=ainv),
         ))
 
-This code gives identical results to that above.
+This code gives identical results to that above. 
+
+Both :meth:`moments` and :meth:`fourier_vacpol` can be used with filters
+that, for example, introduce t-windows. Setting ::
+
+        vpol = g2.fourier_vacpol(
+            G, ainv=ainv, Z=Z, periodic=True,
+            filter=g2.TanhWin(t1=1.5, dt=0.15)
+            )
+
+in the previous example restricts the contributions from ``G`` to 
+times between 0 and 1.5 fm, where the 
+cutoff at the upper end is spread over a region of order 0.15 fm.
 
 |g2tools| is designed to work with module :mod:`gvar` which we use here
 to represent the statistical and systematic uncertainties in

@@ -169,6 +169,17 @@ the Fourier method is simpler to code:</p>
 </pre></div>
 </div>
 <p>This code gives identical results to that above.</p>
+<p>Both <code class="xref py py-meth docutils literal notranslate"><span class="pre">moments()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">fourier_vacpol()</span></code> can be used with filters
+that, for example, introduce t-windows. Setting</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vpol</span> <span class="o">=</span> <span class="n">g2</span><span class="o">.</span><span class="n">fourier_vacpol</span><span class="p">(</span>
+    <span class="n">G</span><span class="p">,</span> <span class="n">ainv</span><span class="o">=</span><span class="n">ainv</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">Z</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">filter</span><span class="o">=</span><span class="n">g2</span><span class="o">.</span><span class="n">TanhWin</span><span class="p">(</span><span class="n">t1</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>in the previous example restricts the contributions from <code class="docutils literal notranslate"><span class="pre">G</span></code> to
+times between 0 and 1.5 fm, where the
+cutoff at the upper end is spread over a region of order 0.15 fm.</p>
 <p><a class="reference internal" href="g2tools.html#module-g2tools" title="g2tools: Least-Squares Fit to Correlators."><code class="xref py py-mod docutils literal notranslate"><span class="pre">g2tools</span></code></a> is designed to work with module <code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> which we use here
 to represent the statistical and systematic uncertainties in
 the correlator values, inverse lattice spacing, and <code class="docutils literal notranslate"><span class="pre">Z</span></code> factor. Each of these

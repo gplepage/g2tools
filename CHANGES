@@ -1,3 +1,13 @@
+Version 1.4 2022-04-07
+========================
+
+- fourier_vacpol() and moments() have a new keyword, filter, that allows
+  the use of t-windows, among other things.
+
+- Adds class TanhWin which is a t-window filter for use in the above.
+
+- Adds new methods R2G and R2a_mu for analyzing Re+e- data.
+
 Version 1.3.4 2018-06-26
 =========================
 
