@@ -17,7 +17,7 @@ PYTHONVERSION = python`python -c 'import platform; print(platform.python_version
 VERSION = `cd ..; python -c 'import g2tools; print(g2tools.__version__)'`
 
 DOCFILES :=  $(shell ls doc/source/*.{rst,py})
-SRCFILES := $(shell ls setup.py src/*.py)
+SRCFILES := $(shell ls setup.py src/g2tools/*.py)
 
 install-user :
 	$(PIP) install . --user
