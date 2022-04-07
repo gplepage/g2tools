@@ -61,7 +61,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'g2tools'
-copyright = u'2017, G.P. Lepage'
+copyright = u'2017-22, G.P. Lepage'
 author = u'G.P. Lepage'
 
 # The version info for the project you're documenting, acts as replacement for
