@@ -183,7 +183,7 @@ class TanhWin:
     or :class:`fourier_vacpol`. It suppresses contributions
     from ``t`` values less than ``t0`` and larger than ``t1``
     using a step function smeared over width ``dt`` at 
-    the boundaries. 
+    the step. 
     
     Args:
         t0 (float or None): Low end of window (in fm). Ignored if 
@@ -194,7 +194,7 @@ class TanhWin:
             ``t`` are retained.
         dt (float): Width of transitions (in fm). Default is ``dt=0.15``.
     """
-    def __init__(self, t0=None, t1=None, dt=0.5):
+    def __init__(self, t0=None, t1=None, dt=0.15):
         self.t0 = t0 / 0.197326968 if t0 is not None else t0 
         self.t1 = t1 / 0.197326968 if t1 is not None else t1
         self.dt = dt / 0.197326968
@@ -210,11 +210,12 @@ class TanhWin:
         if self.t0 is None:
             if self.t1 is not None:
                 return G * (1 - THETA(t, self.t1, self.dt))
+            else:
+                return G * 1
         elif self.t1 is None:
             return G * THETA(t, self.t0, self.dt)
         else:
             return G * (THETA(t, self.t0, self.dt) - THETA(t, self.t1, self.dt))
-        return G
 
 def R2a_mu(E, R, mmu=None, alpha=None, spline=True):
     """ Calclate leading-order hadronic contribution to g-2 anomaly a_mu = (g-2)/2 from |Re+e-|\ (E).

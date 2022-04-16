@@ -1,3 +1,9 @@
+Version 1.4.1  2022-04-16
+===========================
+Adds missing documentation (about windows) and fixes default dt in TanhWin.
+Fixes bug in TanhWin when both t0 and t1 are None.
+
+
 Version 1.4 2022-04-07
 ========================
 

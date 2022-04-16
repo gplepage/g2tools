@@ -517,7 +517,7 @@ class test_g2tools(unittest.TestCase):
         R[E < 3.0] = gv.gvar('2.0(6)')
         ainv = 8.
         G = R2G(E, R, ainv=ainv)
-        vpol = fourier_vacpol(G, ainv=ainv, periodic=False)
+        vpol = fourier_vacpol(G, ainv=ainv, periodic=False, filter=TanhWin(dt=0.5)) # no window
         amu = a_mu(vpol) * 1e10
         self.assertEqual(amu.fmt(), '274(82)')
         vpol = fourier_vacpol(G, ainv=ainv, periodic=False, filter=TanhWin(t1=1.5, dt=0.5))

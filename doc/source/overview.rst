@@ -136,7 +136,7 @@ that, for example, introduce t-windows. Setting ::
             filter=g2.TanhWin(t1=1.5, dt=0.15)
             )
 
-in the previous example restricts the contributions from ``G`` to 
+in the  previous example restricts the contributions from ``G`` to 
 times between 0 and 1.5 fm, where the 
 cutoff at the upper end is spread over a region of order 0.15 fm.
 

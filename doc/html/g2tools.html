@@ -13,6 +13,7 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Muon g-2 from Lattice QCD using g2tools" href="overview.html" />
@@ -327,6 +328,35 @@ to the elements of G. Ignored if <code class="docutils literal notranslate"><spa
 </dd></dl>
 
 </section>
+<section id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
+<p>The following is a filter that can be used with <a class="reference internal" href="#g2tools.moments" title="g2tools.moments"><code class="xref py py-meth docutils literal notranslate"><span class="pre">moments()</span></code></a> or <a class="reference internal" href="#g2tools.fourier_vacpol" title="g2tools.fourier_vacpol"><code class="xref py py-class docutils literal notranslate"><span class="pre">fourier_vacpol</span></code></a> to impose
+windows on <span class="math notranslate nohighlight">\(G(t)\)</span>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="g2tools.TanhWin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">g2tools.</span></span><span class="sig-name descname"><span class="pre">TanhWin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#g2tools.TanhWin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Window function from arXiv:1701.06874.</p>
+<p>This is a correlator filter for use in <a class="reference internal" href="#g2tools.moments" title="g2tools.moments"><code class="xref py py-func docutils literal notranslate"><span class="pre">moments()</span></code></a>
+or <a class="reference internal" href="#g2tools.fourier_vacpol" title="g2tools.fourier_vacpol"><code class="xref py py-class docutils literal notranslate"><span class="pre">fourier_vacpol</span></code></a>. It suppresses contributions
+from <code class="docutils literal notranslate"><span class="pre">t</span></code> values less than <code class="docutils literal notranslate"><span class="pre">t0</span></code> and larger than <code class="docutils literal notranslate"><span class="pre">t1</span></code>
+using a step function smeared over width <code class="docutils literal notranslate"><span class="pre">dt</span></code> at
+the step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t0</strong> (<em>float</em><em> or </em><em>None</em>) – Low end of window (in fm). Ignored if
+<code class="docutils literal notranslate"><span class="pre">t0=None</span></code> (default) and contributons down to <code class="docutils literal notranslate"><span class="pre">t=0</span></code>
+are retained.</p></li>
+<li><p><strong>t1</strong> (<em>float</em><em> or </em><em>None</em>) – High end of window (in fm). Ignored if
+<code class="docutils literal notranslate"><span class="pre">t1=None</span></code> (default) and contributions out to infinite
+<code class="docutils literal notranslate"><span class="pre">t</span></code> are retained.</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – Width of transitions (in fm). Default is <code class="docutils literal notranslate"><span class="pre">dt=0.15</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="re-e">
 <h2>R<sub>e+e-</sub><a class="headerlink" href="#re-e" title="Permalink to this headline">¶</a></h2>
 <p>There are two tools for analyzing data from e+e- annihilation to hadrons (R<sub>e+e-</sub>(E)):</p>
@@ -488,6 +518,7 @@ normalized to 1.</p>
 <li><a class="reference internal" href="#g-2-anomaly">g-2 Anomaly</a></li>
 <li><a class="reference internal" href="#moments">Moments</a></li>
 <li><a class="reference internal" href="#subtracted-vacuum-polarization">Subtracted Vacuum Polarization</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
 <li><a class="reference internal" href="#re-e">R<sub>e+e-</sub></a></li>
 <li><a class="reference internal" href="#pade-approximants">Padé Approximants</a></li>
 </ul>
@@ -535,7 +566,7 @@ normalized to 1.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, G.P. Lepage.
+        &#169; Copyright 2017-22, G.P. Lepage.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
