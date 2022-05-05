@@ -762,7 +762,7 @@ class vacpol(object):
             qth = self.qth
         return numpy.any(numpy.iscomplex(self.poles)) or numpy.any(self.poles > -(qth ** 2))
 
-    def FT(self, t, ainv=1.):
+    def FT(self, t, ainv=None):
         """ Fourier transform of ``q2 * PI-hat(q2)``.
 
         The Pade approximant can be decomposed into a sum of poles (partial
@@ -790,7 +790,9 @@ class vacpol(object):
                 units if ``ainv`` is specified (assuming the original
                 Taylor coefficients are in physical units).
         """
-        # Need 1/ainv**3 to put G(t) into lattice units.
+        # Need 1/ainv**3 to put G(t) into lattice units
+        if ainv is None:
+            ainv = 1.
         if numpy.shape(t) == ():
             return numpy.sum(self.ampl * numpy.exp(-self.E*t)) / ainv ** 3
         else:
