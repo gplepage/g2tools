@@ -54,7 +54,7 @@ represented by the following classes:
 
 Windows
 --------
-The following is a filter that can be used with :meth:`moments` or :class:`fourier_vacpol` to impose 
+The  following is a filter that can be used with :meth:`moments` or :class:`fourier_vacpol` to impose 
 windows on :math:`G(t)`.
 
 .. autoclass:: g2tools.TanhWin 
