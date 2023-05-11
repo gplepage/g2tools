@@ -20,7 +20,7 @@ The main tool for calculating the muon's anomaly is:
 
 Moments
 ----------
-The main tools for creating and manipulating moments are:
+The main tools for  creating and manipulating moments are:
 
 .. autofunction:: g2tools.moments
 

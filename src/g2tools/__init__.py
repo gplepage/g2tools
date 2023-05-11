@@ -75,7 +75,17 @@ at https://github.com/gplepage.
 # GNU General Public License for more details.
 from __future__ import division
 
-from ._version import __version__
+try:
+    import sys
+
+    if sys.version_info >= (3, 8):
+        from importlib import metadata
+    else:
+        import importlib_metadata as metadata
+    __version__ = metadata.version('gvar')
+except:
+    # less precise default if fail
+    __version__ = '>=1.4.2'
 
 import gvar
 import lsqfit
