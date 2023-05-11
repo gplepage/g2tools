@@ -31,7 +31,7 @@ uninstall :			# mostly works (may leave some empty directories)
 update: 
 	make uninstall install
 
-. PHONY : doc
+.PHONY : doc
 
 doc-html doc: 
 	make doc/html/index.html
