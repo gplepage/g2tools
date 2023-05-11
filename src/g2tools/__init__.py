@@ -82,7 +82,7 @@ try:
         from importlib import metadata
     else:
         import importlib_metadata as metadata
-    __version__ = metadata.version('gvar')
+    __version__ = metadata.version('g2tools')
 except:
     # less precise default if fail
     __version__ = '>=1.4.2'
