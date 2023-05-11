@@ -18,4 +18,6 @@ git-instructions
 doc/html/_static/dialog-todo.png
 doc/latex/
 tmp/
+src/*.egg-info
 README.html
+*.egg-info

@@ -1,5 +1,5 @@
 include makefile README INSTALLATION COPYING MANIFEST.in CHANGES
-include src/*.py
+include src/*.py pyproject.toml setup.cfg setup.py
 
 graft doc
 graft tests
