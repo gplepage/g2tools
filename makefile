@@ -20,10 +20,10 @@ DOCFILES :=  $(shell ls doc/source/*.{rst,py})
 SRCFILES := $(shell ls setup.py src/g2tools/*.py)
 
 install-user :
-	$(PIP) install . --user
+	$(PIP) install . --user --no-cache-dir
 
 install install-sys :
-	$(PIP) install .
+	$(PIP) install . --no-cache-dir
 
 uninstall :			# mostly works (may leave some empty directories)
 	$(PIP) uninstall g2tools
@@ -31,33 +31,19 @@ uninstall :			# mostly works (may leave some empty directories)
 update: 
 	make uninstall install
 
-try:
-	$(PYTHON) setup.py install --user --record files-g2tools.$(PYTHONVERSION)
+. PHONY : doc
 
-untry:
-	- cat files-g2tools.$(PYTHONVERSION) | xargs rm -rf
-
-doc-html: src/g2tools/__init__.py src/g2tools/_version.py doc/source/overview.rst doc/source/g2tools.rst
+doc-html doc: 
 	make doc/html/index.html
 
-doc/html/index.html : $(DOCFILES) $(SRCFILES)
-	rm -rf doc/html; sphinx-build -b html doc/source doc/html
+doc/html/index.html : $(DOCFILES) $(SRCFILES) setup.cfg
+	sphinx-build -b html doc/source doc/html
 
-# doc-pdf:
-# 	make doc/g2tools.pdf
-
-# doc/g2tools.pdf : $(DOCFILES) $(SRCFILES)
-# 	rm -rf doc/g2tools.pdf
-# 	sphinx-build -b latex doc/source doc/latex
-# 	cd doc/latex; make g2tools.pdf; mv g2tools.pdf ..
-
-doc-zip doc.zip:
-	cd doc/html; zip -r doc *; mv doc.zip ../..
-
-doc-all: doc-html # doc-pdf
+clear-doc:
+	rm -rf doc/html; 
 
 sdist:			# source distribution
-	$(PYTHON) setup.py sdist
+	$(PYTHON) -m build --sdist
 
 .PHONY: tests
 
@@ -67,14 +53,8 @@ tests test-all:
 run run-examples:
 	$(MAKE) -C examples PYTHON=$(PYTHON) run
 
-register-pypi:
-	python setup.py register # use only once, first time
-
 upload-twine:
 	twine upload dist/g2tools-$(VERSION).tar.gz
-
-upload-pypi:
-	python setup.py sdist upload
 
 upload-git:
 	echo  "version $(VERSION)"
