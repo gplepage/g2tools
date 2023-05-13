@@ -1,3 +1,7 @@
+Version 1.4.4 2023-05-12
+==========================
+- Updates installation code.
+
 Version 1.4.1  2022-04-16
 ===========================
 Adds missing documentation (about windows) and fixes default dt in TanhWin.

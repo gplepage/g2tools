@@ -62,7 +62,7 @@ at https://github.com/gplepage.
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-09-13.
-# Copyright (c) 2014-2022  G. Peter Lepage.
+# Copyright (c) 2014-2023  G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ try:
     __version__ = metadata.version('g2tools')
 except:
     # less precise default if fail
-    __version__ = '>=1.4.2'
+    __version__ = '>=1.4.3'
 
 import gvar
 import lsqfit
